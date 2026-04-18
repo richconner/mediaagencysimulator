@@ -87,13 +87,13 @@
 <div class="container">
     <div class="header">
         <div>
-            <h1>Media Agency Simulator <span class="version-badge">v1.5.0</span></h1>
+            <h1>Media Agency Simulator <span class="version-badge">v1.6.0</span></h1>
             <div style="font-size: 0.85em; color: #94a3b8; margin-top: 2px;">Month <span id="monthDisplay" style="color: white; font-weight: bold; font-size: 1.2em;">1</span></div>
         </div>
         <div class="stat-block">
             <div class="stat-item">
-                <span class="stat-label">SEO / Halo</span>
-                <span class="stat-value" style="font-size: 0.9em; color: #cbd5e1;"><span id="seoDisplay">0</span> / <span id="haloDisplay">1.00</span>x</span>
+                <span class="stat-label">Total Staff</span>
+                <span class="stat-value" id="headcountDisplay">6</span>
             </div>
             <div class="stat-item" style="border-left: 1px solid #334155; padding-left: 20px;">
                 <span class="stat-label">Client Mood</span>
@@ -116,8 +116,21 @@
                         <button onclick="updateHR('ceo', -1)">-</button><span id="ceoCount">1</span><button onclick="updateHR('ceo', 1)">+</button>
                     </div>
                 </div>
+                <div class="role-card" style="border-color: #8b5cf6; background: #ede9fe;">
+                    <div class="role-info"><strong>COO</strong> ($25k)<br><span class="hint">Req. if Staff > 25</span></div>
+                    <div class="role-controls">
+                        <button onclick="updateHR('coo', -1)">-</button><span id="cooCount">0</span><button onclick="updateHR('coo', 1)">+</button>
+                    </div>
+                </div>
+
                 <div class="role-card" style="border-color: #93c5fd; background: #eff6ff;">
-                    <div class="role-info"><strong>Director</strong> ($12k)<br><span class="hint">Manages 5 Buyers</span></div>
+                    <div class="role-info"><strong>VP</strong> ($15k)<br><span class="hint">Req. per 15 Staff</span></div>
+                    <div class="role-controls">
+                        <button onclick="updateHR('vp', -1)">-</button><span id="vpCount">0</span><button onclick="updateHR('vp', 1)">+</button>
+                    </div>
+                </div>
+                <div class="role-card" style="border-color: #60a5fa; background: #dbeafe;">
+                    <div class="role-info"><strong>Director</strong> ($12k)<br><span class="hint">Req. per 5 Buyers</span></div>
                     <div class="role-controls">
                         <button onclick="updateHR('dir', -1)">-</button><span id="dirCount">0</span><button onclick="updateHR('dir', 1)">+</button>
                     </div>
@@ -264,17 +277,17 @@
         </div>
         
         <div class="log-area" id="logArea">
-            <div class="log-entry">System v1.5.0 initialized. Watch out for Recruiting and Severance fees unless you hire an HR Manager!</div>
+            <div class="log-entry">System v1.6.0 initialized. Watch your Total Headcount! As you scale, you will be forced to hire VPs and a COO.</div>
         </div>
     </div>
 </div>
 
 <script>
-    const salaries = { ceo: 15000, dir: 12000, am: 6000, bd: 9000, hrm: 7000, cd: 12000, sr: 8000, jr: 3000 };
+    const salaries = { ceo: 15000, coo: 25000, vp: 15000, dir: 12000, am: 6000, bd: 9000, hrm: 7000, cd: 12000, sr: 8000, jr: 3000 };
 
     let state = { 
         month: 1, balance: 100000, clientBudget: 500000, patience: 3, halo: 1.0, seo: 0, loyaltyBoost: false,
-        hr: { ceo: 1, dir: 0, am: 1, bd: 0, hrm: 0, cd: 0, sr: 3, jr: 1 }, 
+        hr: { ceo: 1, coo: 0, vp: 0, dir: 0, am: 1, bd: 0, hrm: 0, cd: 0, sr: 3, jr: 1 }, 
         briefHistory: [], currentBrief: 'Performance', currentEvent: 'Normal' 
     };
     
@@ -328,12 +341,12 @@
 
     function updateHR(type, change) {
         if (type === 'ceo' && (state.hr.ceo + change > 1 || state.hr.ceo + change < 0)) return;
+        if (type === 'coo' && (state.hr.coo + change > 1 || state.hr.coo + change < 0)) return;
         
         if (state.hr[type] + change >= 0) {
             let fee = 0;
             let msg = "";
             
-            // Apply Recruiting/Severance fees if the agency doesn't have an HR Manager.
             if (state.hr.hrm === 0) {
                 if (change > 0) {
                     fee = 5000;
@@ -410,12 +423,21 @@
 
     function validateForm() {
         let payroll = 0;
-        Object.keys(state.hr).forEach(role => payroll += state.hr[role] * salaries[role]);
+        let totalStaff = 0;
+        
+        Object.keys(state.hr).forEach(role => {
+            payroll += state.hr[role] * salaries[role];
+            totalStaff += state.hr[role];
+        });
+
+        document.getElementById('headcountDisplay').innerText = totalStaff;
 
         let capacity = (state.hr.jr * 50000) + (state.hr.sr * 150000); 
         
         let totalBuyers = state.hr.jr + state.hr.sr;
         let requiredDirs = Math.max(0, Math.ceil(totalBuyers / 5) - 1);
+        let requiredVPs = Math.floor(totalStaff / 15);
+        let requiredCOO = totalStaff > 25 ? 1 : 0;
         
         let mediaSpend = 0;
         channels.forEach(ch => mediaSpend += parseInt(document.getElementById('ch_' + ch).value) || 0);
@@ -442,6 +464,8 @@
         
         if (state.hr.ceo !== 1) { elAllocated.style.color = "var(--danger)"; btnRun.innerText = "Agency requires 1 CEO"; isValid = false; }
         else if (state.hr.am < 1) { elAllocated.style.color = "var(--danger)"; btnRun.innerText = "Agency requires ≥ 1 Acct Mgr"; isValid = false; }
+        else if (state.hr.coo < requiredCOO) { elAllocated.style.color = "var(--danger)"; btnRun.innerText = `Agency > 25 staff requires 1 COO`; isValid = false; }
+        else if (state.hr.vp < requiredVPs) { elAllocated.style.color = "var(--danger)"; btnRun.innerText = `Hire ${requiredVPs - state.hr.vp} more VP(s)`; isValid = false; }
         else if (state.hr.dir < requiredDirs) { elAllocated.style.color = "var(--danger)"; btnRun.innerText = `Hire ${requiredDirs - state.hr.dir} more Director(s)`; isValid = false; }
         else if (mediaSpend > state.clientBudget) { elAllocated.style.color = "var(--danger)"; btnRun.innerText = "Over Client Budget"; isValid = false; }
         else if (mediaSpend > capacity) { elAllocated.style.color = "var(--warning)"; btnRun.innerText = "Exceeds Capacity"; isValid = false; }
@@ -469,7 +493,6 @@
         
         channels.forEach(ch => { s[ch] = parseInt(document.getElementById('ch_' + ch).value) || 0; mediaSpend += s[ch]; });
 
-        // Channel Rules
         if(s.tv > 0 && s.tv < 50000) return alert("Linear TV requires a $50k minimum spend.");
         if(s.ctv > 0 && s.ctv < 10000) return alert("CTV requires a $10k minimum spend.");
         if(s.experiential > 0 && s.experiential !== 15000) return alert("Experiential Stunts require exactly a $15,000 flat fee.");
@@ -485,7 +508,6 @@
             return; 
         }
 
-        // Processing Game Mechanics
         state.halo = Math.max(1.0, state.halo - 0.05);
         if(s.tv >= 50000) state.halo += 0.25;
         
@@ -508,7 +530,6 @@
 
         let srBuff = 1.0 + (state.hr.sr * 0.05); 
         
-        // Creative Director Fatigue Doubling
         let emailLimit = state.hr.cd > 0 ? 20000 : 10000;
         let smsLimit = state.hr.cd > 0 ? 10000 : 5000;
         let ctvLimit = state.hr.cd > 0 ? 30000 : 15000;
@@ -574,14 +595,12 @@
             log(`[M${state.month}] ` + msg, "text-warning");
         }
         
-        // BizDev Mechanic: Passive Budget Growth
         if (state.hr.bd > 0) {
             let bdIncrease = state.clientBudget * (0.02 + (Math.random() * 0.03)) * state.hr.bd;
             state.clientBudget += bdIncrease;
             log(`[M${state.month}] BizDev hustled and expanded the client budget by $${fmt(Math.round(bdIncrease))}!`, "text-success");
         }
 
-        // Q4 BUDGET BURN RISK: "Use It or Lose It"
         let unspent = startingBudget - mediaSpend;
         if (state.currentBrief === 'End of Q4 Budget Burn' && unspent > (startingBudget * 0.05)) {
             state.patience--;
