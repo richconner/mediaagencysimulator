@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Omnichannel Agency Sim</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f6; color: #333; margin: 0; padding: 20px; }
+        .container { max-width: 900px; margin: 0 auto; }
+        .header { display: flex; justify-content: space-between; background: #2c3e50; color: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; }
+        .dashboard { display: grid; grid-template-columns: 1fr 2fr; gap: 20px; }
+        .panel { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        h1, h2 { margin-top: 0; }
+        .metric { font-size: 1.1em; margin-bottom: 10px; }
+        .metric span { font-weight: bold; color: #2980b9; }
+        .channels-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
+        .input-group label { display: block; margin-bottom: 5px; font-weight: bold; font-size: 0.9em; }
+        .input-group input { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        .hint { font-size: 0.8em; color: #7f8c8d; display: block; margin-top: 2px; }
+        button { background: #27ae60; color: white; border: none; padding: 15px 20px; font-size: 1.1em; border-radius: 4px; cursor: pointer; width: 100%; font-weight: bold; }
+        button:hover { background: #2ecc71; }
+        button:disabled { background: #95a5a6; cursor: not-allowed; }
+        .log-area { margin-top: 20px; background: white; padding: 20px; border-radius: 8px; max-height: 250px; overflow-y: auto; font-family: monospace; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .log-entry { margin-bottom: 8px; border-bottom: 1px solid #eee; padding-bottom: 8px; }
+        .success { color: #27ae60; }
+        .warning { color: #e67e22; }
+        .danger { color: #c0392b; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <div>
+            <h1>AdVantage Agency</h1>
+            <div>Month: <span id="monthDisplay">1</span></div>
+        </div>
+        <div style="text-align: right;">
+            <div>Agency Bank: <strong style="font-size: 1.5em; color: #2ecc71;">$<span id="agencyFunds">5000</span></strong></div>
+            <div style="font-size: 0.9em; margin-top: 5px;">Brand Halo (TV Multiplier): <span id="haloDisplay">1.00</span>x</div>
+        </div>
+    </div>
+
+    <div class="dashboard">
+        <div class="panel">
+            <h2>Current Client</h2>
+            <div class="metric">Name: <span>MegaCorp Retail</span></div>
+            <div class="metric">Monthly Budget: <span>$50,000</span></div>
+            <div class="metric">Target ROAS: <span>2.0x</span></div>
+            <div class="metric">Client Patience: <span id="patienceDisplay">⭐⭐⭐</span></div>
+            <hr>
+            <p><small><strong>Strategy Notes:</strong> TV requires $10k min spend but boosts digital channels. Email is highly profitable but caps out quickly. Print is safe but low yield.</small></p>
+        </div>
+
+        <div class="panel">
+            <h2>Allocate Budget</h2>
+            <div class="metric" style="text-align: right; font-size: 1.3em;">Remaining: <span>$<span id="remainingBudget">50000</span></span></div>
+            
+            <div class="channels-grid">
+                <div class="input-group">
+                    <label>Paid Search (PPC)</label>
+                    <input type="number" id="ppc" value="0" min="0" oninput="updateRemaining()">
+                    <span class="hint">Predictable, high intent.</span>
+                </div>
+                <div class="input-group">
+                    <label>Paid Social</label>
+                    <input type="number" id="social" value="0" min="0" oninput="updateRemaining()">
+                    <span class="hint">High variance, viral potential.</span>
+                </div>
+                <div class="input-group">
+                    <label>SEO Investment</label>
+                    <input type="number" id="seo" value="0" min="0" oninput="updateRemaining()">
+                    <span class="hint">Builds momentum over time.</span>
+                </div>
+                <div class="input-group">
+                    <label>Programmatic Display</label>
+                    <input type="number" id="programmatic" value="0" min="0" oninput="updateRemaining()">
+                    <span class="hint">Steady, low margin reach.</span>
+                </div>
+                <div class="input-group">
+                    <label>Email Blasts</label>
+                    <input type="number" id="email" value="0" min="0" oninput="updateRemaining()">
+                    <span class="hint">High ROAS, fatigues over $2k.</span>
+                </div>
+
+                <div class="input-group">
+                    <label>Linear Television</label>
+                    <input type="number" id="tv" value="0" min="0" oninput="updateRemaining()">
+                    <span class="hint">$10k min. Builds Brand Halo.</span>
+                </div>
+                <div class="input-group">
+                    <label>Newspapers</label>
+                    <input type="number" id="print" value="0" min="0" oninput="updateRemaining()">
+                    <span class="hint">Low return, very low variance.</span>
+                </div>
+                <div class="input-group">
+                    <label>Billboards</label>
+                    <input type="number" id="billboard" value="0" min="0" oninput="updateRemaining()">
+                    <span class="hint">Fixed return, zero variance.</span>
+                </div>
+            </div>
+
+            <button id="runBtn" onclick="runMonth()">Execute Month Campaigns</button>
+        </div>
+    </div>
+
+    <div class="log-area" id="logArea">
+        <strong>Campaign Log:</strong><br>
+        <div class="log-entry">MegaCorp onboarded. $50,000 budget ready for deployment.</div>
+    </div>
+</div>
+
+<script>
+    let agencyFunds = 5000;
+    let currentMonth = 1;
+    let clientBudget = 50000;
+    let targetRoas = 2.0;
+    let clientPatience = 3;
+    
+    // Hidden Mechanics Variables
+    let seoMomentum = 0; 
+    let brandHalo = 1.0; // Acts as a multiplier for digital channels
+
+    function updateRemaining() {
+        let total = getSpendTotal();
+        let remaining = clientBudget - total;
+        let display = document.getElementById('remainingBudget');
+        display.innerText = remaining;
+        
+        if (remaining < 0) {
+            display.style.color = "red";
+            document.getElementById('runBtn').disabled = true;
+        } else {
+            display.style.color = "#2980b9";
+            document.getElementById('runBtn').disabled = (clientPatience <= 0);
+        }
+    }
+
+    function getSpendTotal() {
+        const ids = ['ppc', 'social', 'seo', 'programmatic', 'email', 'tv', 'print', 'billboard'];
+        let total = 0;
+        ids.forEach(id => {
+            total += parseInt(document.getElementById(id).value) || 0;
+        });
+        return total;
+    }
+
+    function log(message, type = "") {
+        const logArea = document.getElementById('logArea');
+        const entry = document.createElement('div');
+        entry.className = `log-entry ${type}`;
+        entry.innerHTML = `<strong>Month ${currentMonth}:</strong> ${message}`;
+        logArea.prepend(entry);
+    }
+
+    function runMonth() {
+        let spend = {
+            ppc: parseInt(document.getElementById('ppc').value) || 0,
+            social: parseInt(document.getElementById('social').value) || 0,
+            seo: parseInt(document.getElementById('seo').value) || 0,
+            programmatic: parseInt(document.getElementById('programmatic').value) || 0,
+            email: parseInt(document.getElementById('email').value) || 0,
+            tv: parseInt(document.getElementById('tv').value) || 0,
+            print: parseInt(document.getElementById('print').value) || 0,
+            billboard: parseInt(document.getElementById('billboard').value) || 0
+        };
+
+        let totalSpend = getSpendTotal();
+
+        if (totalSpend === 0) {
+            alert("You must allocate budget to run campaigns!");
+            return;
+        }
+
+        // TV Rule Enforcement
+        if (spend.tv > 0 && spend.tv < 10000) {
+            alert("Linear TV requires a minimum production and media spend of $10,000.");
+            return;
+        }
+
+        // --- THE ADVANCED MATH ENGINE ---
+        
+        // Brand Halo Decay (decreases slowly over time if TV isn't maintained)
+        brandHalo = Math.max(1.0, brandHalo - 0.05);
+
+        // Digital (Boosted by Brand Halo)
+        let ppcReturn = spend.ppc * (1.5 + Math.random() * 1.0) * brandHalo;
+        let socialReturn = spend.social * (0.5 + Math.random() * 3.0) * brandHalo;
+        let progReturn = spend.programmatic * (1.0 + Math.random() * 0.8) * brandHalo;
+        
+        // SEO (Momentum based)
+        seoMomentum += (spend.seo * 0.4); 
+        let seoReturn = seoMomentum * (1.2 + Math.random() * 0.5);
+
+        // Email (Fatigue Mechanic)
+        let emailReturn = 0;
+        if (spend.email <= 2000) {
+            emailReturn = spend.email * (3.0 + Math.random() * 2.0); // Amazing return
+        } else {
+            // First $2k gets great return, anything over gets punished severely
+            emailReturn = (2000 * (3.0 + Math.random() * 2.0)) + ((spend.email - 2000) * 0.2); 
+            log("Email list fatigued! Spend over $2,000 yielded poor results.", "warning");
+        }
+
+        // Traditional (Not affected by Brand Halo)
+        let tvReturn = spend.tv * (0.8 + Math.random() * 0.6); // OK return, but...
+        if (spend.tv >= 10000) brandHalo += 0.2; // Boosts future digital!
+        
+        let printReturn = spend.print * (0.7 + Math.random() * 0.5); // Declining medium
+        let billboardReturn = spend.billboard * 1.2; // Steady, safe floor
+
+        let totalRevenue = ppcReturn + socialReturn + progReturn + seoReturn + emailReturn + tvReturn + printReturn + billboardReturn;
+        let currentRoas = (totalRevenue / totalSpend).toFixed(2);
+
+        // --- RESOLVE MONTH ---
+        let resultMsg = `Spent $${totalSpend}. Generated $${totalRevenue.toFixed(0)} (ROAS: ${currentRoas}x). `;
+
+        if (currentRoas >= targetRoas) {
+            let agencyFee = totalSpend * 0.15;
+            agencyFunds += agencyFee;
+            resultMsg += `Hit target! Client paid $${agencyFee.toFixed(0)} fee.`;
+            log(resultMsg, "success");
+            if (currentRoas > targetRoas + 0.5 && clientPatience < 3) clientPatience++;
+        } else {
+            clientPatience--;
+            resultMsg += `Missed target. Client patience dropped.`;
+            log(resultMsg, "danger");
+        }
+
+        // Update UI State
+        currentMonth++;
+        document.getElementById('agencyFunds').innerText = agencyFunds.toFixed(0);
+        document.getElementById('monthDisplay').innerText = currentMonth;
+        document.getElementById('haloDisplay').innerText = brandHalo.toFixed(2);
+        
+        let stars = "";
+        for(let i=0; i<clientPatience; i++) stars += "⭐";
+        document.getElementById('patienceDisplay').innerText = stars || "NONE";
+
+        if (clientPatience <= 0) {
+            log("CLIENT FIRED YOU. Game Over.", "danger");
+            document.getElementById('runBtn').disabled = true;
+        }
+    }
+</script>
+</body>
+</html>
