@@ -118,12 +118,33 @@
                         <button onclick="updateHR('dir', -1)">-</button><span id="dirCount">0</span><button onclick="updateHR('dir', 1)">+</button>
                     </div>
                 </div>
+                
                 <div class="role-card" style="border-color: #fcd34d; background: #fffbeb;">
                     <div class="role-info"><strong>Acct Mgr</strong> ($6k)<br><span class="hint">Client Relations (Min 1)</span></div>
                     <div class="role-controls">
                         <button onclick="updateHR('am', -1)">-</button><span id="amCount">1</span><button onclick="updateHR('am', 1)">+</button>
                     </div>
                 </div>
+                <div class="role-card" style="border-color: #fb923c; background: #fff7ed;">
+                    <div class="role-info"><strong>BizDev</strong> ($9k)<br><span class="hint">+2-5% Budget/mo</span></div>
+                    <div class="role-controls">
+                        <button onclick="updateHR('bd', -1)">-</button><span id="bdCount">0</span><button onclick="updateHR('bd', 1)">+</button>
+                    </div>
+                </div>
+
+                <div class="role-card" style="border-color: #f472b6; background: #fdf2f8;">
+                    <div class="role-info"><strong>HR Mgr</strong> ($7k)<br><span class="hint">Waives Hire/Fire Fees</span></div>
+                    <div class="role-controls">
+                        <button onclick="updateHR('hrm', -1)">-</button><span id="hrmCount">0</span><button onclick="updateHR('hrm', 1)">+</button>
+                    </div>
+                </div>
+                <div class="role-card" style="border-color: #34d399; background: #ecfdf5;">
+                    <div class="role-info"><strong>Creative Dir</strong> ($12k)<br><span class="hint">Doubles Ad Fatigue Limit</span></div>
+                    <div class="role-controls">
+                        <button onclick="updateHR('cd', -1)">-</button><span id="cdCount">0</span><button onclick="updateHR('cd', 1)">+</button>
+                    </div>
+                </div>
+
                 <div class="role-card">
                     <div class="role-info"><strong>Sr Strat</strong> ($8k)<br><span class="hint">$150k Cap</span></div>
                     <div class="role-controls">
@@ -156,7 +177,7 @@
         </div>
         
         <div class="version-tag">
-            Media Agency Simulator v1.3.0
+            Media Agency Simulator v1.4.0
         </div>
     </div>
 
@@ -190,8 +211,8 @@
 
                 <div class="channel-group-title">Direct & Retention</div>
                 <div class="channel-list">
-                    <div class="input-row"><div class="ch-info"><label>Email Blasts</label><span class="hint">Fatigues > $10k</span></div><div class="ch-input"><span>$</span><input type="number" id="ch_email" value="0" min="0" oninput="validateForm()"></div></div>
-                    <div class="input-row"><div class="ch-info"><label>SMS</label><span class="hint">Fatigues > $5k</span></div><div class="ch-input"><span>$</span><input type="number" id="ch_sms" value="0" min="0" oninput="validateForm()"></div></div>
+                    <div class="input-row"><div class="ch-info"><label>Email Blasts</label><span class="hint">Fatigues > $10k (Doubled w/ CD)</span></div><div class="ch-input"><span>$</span><input type="number" id="ch_email" value="0" min="0" oninput="validateForm()"></div></div>
+                    <div class="input-row"><div class="ch-info"><label>SMS</label><span class="hint">Fatigues > $5k (Doubled w/ CD)</span></div><div class="ch-input"><span>$</span><input type="number" id="ch_sms" value="0" min="0" oninput="validateForm()"></div></div>
                     <div class="input-row"><div class="ch-info"><label>Telemarketing</label><span class="hint">Steady 1.2x. Annoys clients.</span></div><div class="ch-input"><span>$</span><input type="number" id="ch_telemarketing" value="0" min="0" oninput="validateForm()"></div></div>
                     <div class="input-row"><div class="ch-info"><label>Loyalty Apps</label><span class="hint">Boosts Email/SMS forever</span></div><div class="ch-input"><span>$</span><input type="number" id="ch_loyalty" value="0" min="0" oninput="validateForm()"></div></div>
                 </div>
@@ -201,7 +222,7 @@
                 <div class="channel-group-title">Brand & Awareness</div>
                 <div class="channel-list">
                     <div class="input-row"><div class="ch-info"><label>Linear TV</label><span class="hint">$50k min. Builds Halo</span></div><div class="ch-input"><span>$</span><input type="number" id="ch_tv" value="0" min="0" oninput="validateForm()"></div></div>
-                    <div class="input-row"><div class="ch-info"><label>Connected TV (CTV)</label><span class="hint">$10k min. Fatigues > $15k</span></div><div class="ch-input"><span>$</span><input type="number" id="ch_ctv" value="0" min="0" oninput="validateForm()"></div></div>
+                    <div class="input-row"><div class="ch-info"><label>Connected TV (CTV)</label><span class="hint">$10k min. Fatigues > $15k (Doubled w/ CD)</span></div><div class="ch-input"><span>$</span><input type="number" id="ch_ctv" value="0" min="0" oninput="validateForm()"></div></div>
                     <div class="input-row"><div class="ch-info"><label>Billboards</label><span class="hint">Safe return floor</span></div><div class="ch-input"><span>$</span><input type="number" id="ch_billboard" value="0" min="0" oninput="validateForm()"></div></div>
                     <div class="input-row"><div class="ch-info"><label>Cinema Ads</label><span class="hint">Local awareness</span></div><div class="ch-input"><span>$</span><input type="number" id="ch_cinema" value="0" min="0" oninput="validateForm()"></div></div>
                     <div class="input-row"><div class="ch-info"><label>Podcasts</label><span class="hint">Deep engagement</span></div><div class="ch-input"><span>$</span><input type="number" id="ch_podcast" value="0" min="0" oninput="validateForm()"></div></div>
@@ -240,15 +261,17 @@
         </div>
         
         <div class="log-area" id="logArea">
-            <div class="log-entry">System v1.3.0 initialized. Watch out for specialized scenarios and scale your Account Management team carefully.</div>
+            <div class="log-entry">System v1.4.0 initialized. Watch out for Recruiting and Severance fees unless you hire an HR Manager!</div>
         </div>
     </div>
 </div>
 
 <script>
+    const salaries = { ceo: 15000, dir: 12000, am: 6000, bd: 9000, hrm: 7000, cd: 12000, sr: 8000, jr: 3000 };
+
     let state = { 
         month: 1, balance: 100000, clientBudget: 500000, patience: 3, halo: 1.0, seo: 0, loyaltyBoost: false,
-        hr: { ceo: 1, dir: 0, am: 1, jr: 1, sr: 3 }, 
+        hr: { ceo: 1, dir: 0, am: 1, bd: 0, hrm: 0, cd: 0, sr: 3, jr: 1 }, 
         briefHistory: [], currentBrief: 'Performance', currentEvent: 'Normal' 
     };
     
@@ -304,6 +327,32 @@
         if (type === 'ceo' && (state.hr.ceo + change > 1 || state.hr.ceo + change < 0)) return;
         
         if (state.hr[type] + change >= 0) {
+            let fee = 0;
+            let msg = "";
+            
+            // Apply Recruiting/Severance fees if the agency doesn't have an HR Manager.
+            // (Note: Hiring the *first* HR Manager still costs a recruiting fee!)
+            if (state.hr.hrm === 0) {
+                if (change > 0) {
+                    fee = 5000;
+                    msg = `Paid $5,000 recruiting fee for new hire.`;
+                } else if (change < 0) {
+                    fee = salaries[type] * 2;
+                    msg = `Paid $${fmt(fee)} severance package.`;
+                }
+            }
+
+            if (fee > 0) {
+                state.balance -= fee;
+                log(`[M${state.month}] ${msg}`, "text-warning");
+                document.getElementById('agencyBalance').innerText = fmt(Math.round(state.balance));
+                
+                if (state.balance < 0) {
+                    log(`[M${state.month}] BANKRUPT. HR fees pushed you into the red. GAME OVER.`, "text-danger");
+                    document.getElementById('runBtn').disabled = true;
+                }
+            }
+
             state.hr[type] += change;
             document.getElementById(type + 'Count').innerText = state.hr[type];
             validateForm();
@@ -358,7 +407,9 @@
     }
 
     function validateForm() {
-        let payroll = (state.hr.ceo * 15000) + (state.hr.dir * 12000) + (state.hr.am * 6000) + (state.hr.jr * 3000) + (state.hr.sr * 8000);
+        let payroll = 0;
+        Object.keys(state.hr).forEach(role => payroll += state.hr[role] * salaries[role]);
+
         let capacity = (state.hr.jr * 50000) + (state.hr.sr * 150000); 
         
         let totalBuyers = state.hr.jr + state.hr.sr;
@@ -410,7 +461,8 @@
         if(s.ctv > 0 && s.ctv < 10000) return alert("CTV requires a $10k minimum spend.");
         if(s.experiential > 0 && s.experiential !== 15000) return alert("Experiential Stunts require exactly a $15,000 flat fee.");
 
-        let payroll = (state.hr.ceo * 15000) + (state.hr.dir * 12000) + (state.hr.am * 6000) + (state.hr.jr * 3000) + (state.hr.sr * 8000);
+        let payroll = 0;
+        Object.keys(state.hr).forEach(role => payroll += state.hr[role] * salaries[role]);
         state.balance -= payroll;
         
         if (state.balance < 0) { 
@@ -442,6 +494,11 @@
         state.seo += (s.seo * 0.3) + (s.branded * 0.8);
 
         let srBuff = 1.0 + (state.hr.sr * 0.05); 
+        
+        // Creative Director Fatigue Doubling
+        let emailLimit = state.hr.cd > 0 ? 20000 : 10000;
+        let smsLimit = state.hr.cd > 0 ? 10000 : 5000;
+        let ctvLimit = state.hr.cd > 0 ? 30000 : 15000;
 
         let returns = {
             ppc: s.ppc * (1.2 + Math.random()) * state.halo, 
@@ -450,12 +507,12 @@
             retail: s.retail * (1.8 + Math.random() * 0.5),
             affiliate: s.affiliate * 1.5, 
             seo: state.seo * (1.0 + Math.random()), 
-            email: (s.email <= 10000 ? s.email * 3 : (10000 * 3) + ((s.email - 10000) * 0.1)) * lBoost,
-            sms: (s.sms <= 5000 ? s.sms * 4 : (5000 * 4) + ((s.sms - 5000) * 0.05)) * lBoost, 
+            email: (s.email <= emailLimit ? s.email * 3 : (emailLimit * 3) + ((s.email - emailLimit) * 0.1)) * lBoost,
+            sms: (s.sms <= smsLimit ? s.sms * 4 : (smsLimit * 4) + ((s.sms - smsLimit) * 0.05)) * lBoost, 
             telemarketing: s.telemarketing * 1.2,
             loyalty: s.loyalty * 0.5,
             tv: s.tv * 0.9, 
-            ctv: s.ctv <= 15000 ? s.ctv * (1.1 + Math.random()) * state.halo : (15000 * (1.1 + Math.random()) * state.halo) + ((s.ctv - 15000) * 0.2),
+            ctv: s.ctv <= ctvLimit ? s.ctv * (1.1 + Math.random()) * state.halo : (ctvLimit * (1.1 + Math.random()) * state.halo) + ((s.ctv - ctvLimit) * 0.2),
             billboard: s.billboard * 1.1, 
             cinema: s.cinema * (0.8 + Math.random()),
             podcast: s.podcast * (1.0 + Math.random()), 
@@ -503,12 +560,19 @@
             msg += `Missed target of ${briefRules.target}x. Earned $${fmt(Math.round(fee))} (5%). Budget ⬇️ ${(budgetChangePct*100).toFixed(1)}%.`; 
             log(`[M${state.month}] ` + msg, "text-warning");
         }
+        
+        // BizDev Mechanic: Passive Budget Growth
+        if (state.hr.bd > 0) {
+            let bdIncrease = state.clientBudget * (0.02 + (Math.random() * 0.03)) * state.hr.bd;
+            state.clientBudget += bdIncrease;
+            log(`[M${state.month}] BizDev hustled and expanded the client budget by $${fmt(Math.round(bdIncrease))}!`, "text-success");
+        }
 
         // Q4 BUDGET BURN RISK: "Use It or Lose It"
         let unspent = startingBudget - mediaSpend;
         if (state.currentBrief === 'End of Q4 Budget Burn' && unspent > (startingBudget * 0.05)) {
             state.patience--;
-            state.clientBudget -= unspent; // Permanently slash future budget based on what was left
+            state.clientBudget -= unspent; 
             log(`[M${state.month}] CRITICAL FAILURE: You left $${fmt(Math.round(unspent))} on the table during a Budget Burn! Finance slashed future budgets and you lost 1 ⭐.`, "text-danger");
         }
 
