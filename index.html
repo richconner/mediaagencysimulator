@@ -9,15 +9,17 @@
         body { font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding: 15px; font-size: 13px; line-height: 1.4; }
         .container { max-width: 1500px; margin: 0 auto; display: grid; grid-template-columns: 340px 1fr; gap: 15px; align-items: start; }
         
-        /* Header */
-        .header { grid-column: 1 / -1; display: flex; justify-content: space-between; align-items: center; background: #0f172a; color: white; padding: 12px 20px; border-radius: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-        .header h1 { margin: 0; font-size: 1.5em; letter-spacing: -0.5px; display: flex; align-items: center; gap: 10px; }
-        .version-badge { font-size: 0.5em; background: rgba(255,255,255,0.1); padding: 4px 8px; border-radius: 12px; font-weight: normal; letter-spacing: 0.5px; color: #cbd5e1; }
+        /* Header & Main Stats Dashboard */
+        .header { grid-column: 1 / -1; display: flex; flex-direction: column; align-items: center; background: #0f172a; color: white; padding: 25px 20px; border-radius: 6px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); gap: 20px; }
+        .header h1 { margin: 0; font-size: 1.8em; letter-spacing: -0.5px; display: flex; align-items: center; gap: 12px; }
+        .version-badge { font-size: 0.55em; background: rgba(255,255,255,0.1); padding: 4px 10px; border-radius: 12px; font-weight: normal; letter-spacing: 0.5px; color: #cbd5e1; }
         
-        .stat-block { display: flex; gap: 20px; align-items: center; text-align: right; }
-        .stat-item { display: flex; flex-direction: column; justify-content: center; }
-        .stat-label { font-size: 0.75em; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; }
-        .stat-value { font-size: 1.3em; font-weight: bold; }
+        .stat-block { display: flex; gap: 0; width: 100%; justify-content: center; align-items: center; border-top: 1px solid #334155; padding-top: 20px; }
+        .stat-item { display: flex; flex-direction: column; align-items: center; padding: 0 45px; border-right: 1px solid #334155; }
+        .stat-item:last-child { border-right: none; }
+        .stat-label { font-size: 0.85em; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+        .stat-value { font-size: 2em; font-weight: bold; line-height: 1.1; }
+        .stat-value.small { font-size: 1.4em; color: #cbd5e1; margin-top: 6px; }
         
         /* Panels */
         .panel { background: var(--panel); padding: 15px; border-radius: 6px; border: 1px solid var(--border); box-shadow: 0 1px 2px rgba(0,0,0,0.03); }
@@ -89,22 +91,28 @@
 
 <div class="container">
     <div class="header">
-        <div>
-            <h1>Media Agency Simulator <span class="version-badge">v1.7.0</span></h1>
-            <div style="font-size: 0.85em; color: #94a3b8; margin-top: 2px;">Month <span id="monthDisplay" style="color: white; font-weight: bold; font-size: 1.2em;">1</span></div>
-        </div>
+        <h1>Media Agency Simulator <span class="version-badge">v1.8.0</span></h1>
+        
         <div class="stat-block">
             <div class="stat-item">
-                <span class="stat-label">Total Staff</span>
-                <span class="stat-value" id="headcountDisplay">6</span>
+                <span class="stat-label">Month</span>
+                <span class="stat-value" id="monthDisplay">1</span>
             </div>
-            <div class="stat-item" style="border-left: 1px solid #334155; padding-left: 20px;">
+            <div class="stat-item">
+                <span class="stat-label">Agency Balance</span>
+                <span class="stat-value" style="color: #34d399;">$<span id="agencyBalance">100,000</span></span>
+            </div>
+            <div class="stat-item">
                 <span class="stat-label">Client Mood</span>
                 <span class="stat-value"><span id="patienceDisplay">⭐⭐⭐</span> <span id="moodDisplay">😀</span></span>
             </div>
-            <div class="stat-item" style="border-left: 1px solid #334155; padding-left: 20px;">
-                <span class="stat-label">Agency Balance</span>
-                <span class="stat-value" style="color: #34d399;">$<span id="agencyBalance">100,000</span></span>
+            <div class="stat-item">
+                <span class="stat-label">Total Staff</span>
+                <span class="stat-value" id="headcountDisplay" style="color: #cbd5e1;">6</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">SEO / Halo</span>
+                <span class="stat-value small"><span id="seoDisplay">0</span> / <span id="haloDisplay">1.00</span>x</span>
             </div>
         </div>
     </div>
@@ -282,7 +290,7 @@
         </div>
         
         <div class="log-area" id="logArea">
-            <div class="log-entry">System v1.7.0 initialized. Watch your Total Headcount! As you scale, you will be forced to hire VPs and a COO.</div>
+            <div class="log-entry">System v1.8.0 initialized. Watch your Total Headcount! As you scale, you will be forced to hire VPs and a COO.</div>
         </div>
     </div>
 </div>
