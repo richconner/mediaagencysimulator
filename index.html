@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Media Agency Sim: Pro Dashboard</title>
+    <title>Media Agency Sim: Edutainment Edition</title>
     <style>
-        :root { --bg: #f4f5f7; --text: #1e293b; --panel: #ffffff; --primary: #3b82f6; --success: #10b981; --danger: #ef4444; --warning: #f59e0b; --border: #e2e8f0; --hint: #64748b; }
+        :root { --bg: #f4f5f7; --text: #1e293b; --panel: #ffffff; --primary: #3b82f6; --success: #10b981; --danger: #ef4444; --warning: #f59e0b; --info: #0ea5e9; --border: #e2e8f0; --hint: #64748b; }
         body { font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding: 15px; font-size: 14px; line-height: 1.4; }
         .container { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: 320px 1fr; gap: 15px; }
         
@@ -64,12 +64,13 @@
         .btn-run:hover { opacity: 0.9; }
         .btn-run:disabled { background: #94a3b8; cursor: not-allowed; opacity: 1; }
         
-        .log-area { max-height: 200px; overflow-y: auto; font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; background: #0f172a; color: #e2e8f0; padding: 12px; border-radius: 4px; font-size: 0.8em; margin-top: 15px; }
-        .log-entry { margin-bottom: 6px; padding-bottom: 6px; border-bottom: 1px solid #334155; }
+        .log-area { max-height: 250px; overflow-y: auto; font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; background: #0f172a; color: #e2e8f0; padding: 12px; border-radius: 4px; font-size: 0.85em; margin-top: 15px; }
+        .log-entry { margin-bottom: 8px; padding-bottom: 8px; border-bottom: 1px solid #334155; }
         .log-entry:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
         .text-success { color: #34d399; }
         .text-danger { color: #f87171; }
         .text-warning { color: #fbbf24; }
+        .text-info { color: var(--info); font-weight: normal; font-style: italic; background: rgba(14, 165, 233, 0.1); padding: 4px; border-radius: 3px; display: inline-block; width: 100%; box-sizing: border-box; }
         .text-special { color: #a78bfa; font-weight: bold; }
     </style>
 </head>
@@ -123,7 +124,7 @@
             <h2>Market Context</h2>
             <div class="card brief-card" id="briefCardBox">
                 <span class="card-title">Brief: <span id="briefTitle">Performance</span></span>
-                <div class="card-desc" id="briefDesc">Focus on direct sales. Favor PPC, Direct Mail, Email.</div>
+                <div class="card-desc" id="briefDesc">Focus strictly on direct sales and immediate ROI. Brand building is secondary.</div>
                 <div style="margin-top: 6px; font-weight: bold; color: var(--primary);">Target ROAS: <span id="targetRoas">2.5</span>x</div>
             </div>
             <div class="card event-card" id="eventCard">
@@ -189,7 +190,7 @@
         </div>
         
         <div class="log-area" id="logArea">
-            <div class="log-entry">System ready. Look out for Special Briefs and Market Events.</div>
+            <div class="log-entry">System ready. Deduce the correct media mix based on the scenario! Post-campaign insights will appear here.</div>
         </div>
     </div>
 </div>
@@ -198,23 +199,52 @@
     let state = { month: 1, funds: 25000, clientBudget: 100000, patience: 3, halo: 1.0, seo: 0, hr: { jr: 1, sr: 0 }, currentBrief: 'Performance', currentEvent: 'Normal' };
     const channels = ['ppc', 'social', 'seo', 'prog', 'affiliate', 'email', 'sms', 'mail', 'tv', 'billboard', 'cinema', 'podcast', 'influencer'];
     
-    // NEW UNIQUE SCENARIOS ADDED HERE
+    // UPDATED BRIEFS - No hints in desc, feedback added for learning.
     const briefs = {
-        'Performance': { target: 2.5, special: false, desc: "Focus on direct sales. Favor PPC, Direct Mail, Email, SMS, Affiliate.", bonuses: ['ppc', 'mail', 'email', 'sms', 'affiliate'] },
-        'Awareness': { target: 1.2, special: false, desc: "Focus on reach. Favor TV, Billboards, Cinema, Podcasts, Programmatic.", bonuses: ['tv', 'billboard', 'cinema', 'podcast', 'prog'] },
-        'Retention': { target: 1.8, special: false, desc: "Focus on existing customers. Favor Social, Email, Influencer, SMS.", bonuses: ['social', 'email', 'influencer', 'sms'] },
-        'CEO Vanity Project': { target: 0.8, special: true, desc: "The CEO just wants to see their own face online. Buy heavy Programmatic and Social.", bonuses: ['social', 'prog', 'podcast'] },
-        'B2B Event Blitz': { target: 1.5, special: true, desc: "Major industry trade show this month. Blanket the venue with Billboards, Mail, and Email.", bonuses: ['billboard', 'mail', 'email'] },
-        'PR Damage Control': { target: 0.5, special: true, desc: "An executive made a public blunder. Buy Brand PPC, TV, and Social to control the narrative.", bonuses: ['ppc', 'tv', 'social'] }
+        'Performance': { 
+            target: 2.5, special: false, 
+            desc: "Focus strictly on direct sales and immediate ROI. Brand building is secondary this month.", 
+            bonuses: ['ppc', 'mail', 'email', 'sms', 'affiliate'],
+            feedback: "Performance briefs demand high-intent channels (Paid Search) and direct-response formats (Email, SMS, Direct Mail, Affiliates)."
+        },
+        'Awareness': { 
+            target: 1.2, special: false, 
+            desc: "Maximize reach and brand visibility. The client wants everyone to see their logo.", 
+            bonuses: ['tv', 'billboard', 'cinema', 'podcast', 'prog'],
+            feedback: "Awareness requires cheap reach and large formats. TV, Billboards, Cinema, Podcasts, and Programmatic are ideal for top-of-funnel branding."
+        },
+        'Retention': { 
+            target: 1.8, special: false, 
+            desc: "Focus on increasing the lifetime value of existing customers and reducing client churn.", 
+            bonuses: ['social', 'email', 'influencer', 'sms'],
+            feedback: "Retention relies on channels where you control the audience list (Email, SMS) or community-driven platforms (Social, Influencers)."
+        },
+        'CEO Vanity Project': { 
+            target: 0.8, special: true, 
+            desc: "The CEO just wants to see their own face online. Performance metrics do not matter this month.", 
+            bonuses: ['social', 'prog', 'podcast'],
+            feedback: "To ensure a specific person sees an ad, you need granular targeting. Programmatic (IP targeting) and Paid Social are perfect for vanity placements."
+        },
+        'B2B Event Blitz': { 
+            target: 1.5, special: true, 
+            desc: "A major industry trade show is happening this month. We need to dominate the physical event.", 
+            bonuses: ['billboard', 'mail', 'email'],
+            feedback: "Event marketing requires localized presence. Billboards near the venue, Direct Mail to partner hotels, and Email sequences are key."
+        },
+        'PR Damage Control': { 
+            target: 0.5, special: true, 
+            desc: "An executive made a massive public blunder. We need to control the narrative immediately.", 
+            bonuses: ['ppc', 'tv', 'social'],
+            feedback: "During a crisis, you must own the narrative. Paid Search controls brand keywords, TV allows for apology broadcasts, and Social manages community sentiment."
+        }
     };
     
-    // NEW MARKET EVENTS ADDED HERE
     const events = [
         { name: 'Normal', desc: "Conditions stable." },
-        { name: 'Privacy Update', desc: "Social & Programmatic ROI drops 40%." },
-        { name: 'Holiday Rush', desc: "All conversions up, but costs are higher." },
-        { name: 'Viral Meme', desc: "A TikTok went viral! Influencer & Social returns doubled." },
-        { name: 'Competitor Collapsed', desc: "A rival went bust. PPC and Affiliate are highly lucrative this month." }
+        { name: 'Privacy Update', desc: "Major OS update hits tracking capabilities." },
+        { name: 'Holiday Rush', desc: "Consumer spending is peaking, but CPMs (costs) are high." },
+        { name: 'Viral Meme', desc: "The client was featured in a trending meme unexpectedly." },
+        { name: 'Competitor Collapsed', desc: "A major rival just declared bankruptcy." }
     ];
 
     const fmt = num => num.toLocaleString();
@@ -242,9 +272,9 @@
         document.getElementById('targetRoas').innerText = b.target;
         
         if (b.special) {
-            document.getElementById('briefCardBox').style.borderColor = "#8b5cf6"; // Purple for special briefs
+            document.getElementById('briefCardBox').style.borderColor = "#8b5cf6"; 
             document.getElementById('briefCardBox').style.backgroundColor = "#f5f3ff";
-            log(`CRITICAL BRIEF: ${state.currentBrief}. Adjust strategy accordingly.`, "text-special");
+            log(`NEW SCENARIO: Read the brief carefully to deduce the optimal media mix.`, "text-special");
         } else {
             document.getElementById('briefCardBox').style.borderColor = "var(--primary)";
             document.getElementById('briefCardBox').style.backgroundColor = "#eff6ff";
@@ -294,7 +324,7 @@
 
     function log(msg, type="") {
         const area = document.getElementById('logArea');
-        area.innerHTML = `<div class="log-entry ${type}">[M${state.month}] ${msg}</div>` + area.innerHTML;
+        area.innerHTML = `<div class="log-entry ${type}">${type !== 'text-info' ? `[M${state.month}] ` : ''}${msg}</div>` + area.innerHTML;
     }
 
     function runMonth() {
@@ -321,7 +351,6 @@
             podcast: s.podcast * (1.0 + Math.random()), influencer: s.influencer * (Math.random() * 4) * srBuff
         };
 
-        // NEW EVENT MODIFIERS ADDED HERE
         if(state.currentEvent === 'Privacy Update') { returns.social *= 0.6; returns.prog *= 0.6; }
         if(state.currentEvent === 'Holiday Rush') { for(let k in returns) returns[k] *= 1.4; }
         if(state.currentEvent === 'Viral Meme') { returns.social *= 2.0; returns.influencer *= 2.0; }
@@ -340,6 +369,9 @@
         } else {
             state.patience--; msg += `Missed target of ${briefRules.target}x.`; log(msg, "text-warning");
         }
+
+        // Output the Educational Feedback
+        log(`💡 <strong>Agency Insight:</strong> ${briefRules.feedback}`, "text-info");
 
         if (state.patience <= 0) {
             document.getElementById('patienceDisplay').innerText = "NONE"; updateMood();
