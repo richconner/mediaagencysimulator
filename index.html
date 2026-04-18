@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Media Agency Sim: Dynamic Scale Edition</title>
+    <title>Media Agency Simulator</title>
     <style>
         :root { --bg: #f4f5f7; --text: #1e293b; --panel: #ffffff; --primary: #3b82f6; --success: #10b981; --danger: #ef4444; --warning: #f59e0b; --info: #0ea5e9; --border: #e2e8f0; --hint: #64748b; }
         body { font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding: 15px; font-size: 14px; line-height: 1.4; }
-        .container { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: 340px 1fr; gap: 15px; }
+        .container { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: 340px 1fr; gap: 15px; align-items: start; }
         
         /* Header */
         .header { grid-column: 1 / -1; display: flex; justify-content: space-between; align-items: center; background: #0f172a; color: white; padding: 12px 20px; border-radius: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
@@ -19,7 +19,7 @@
         
         /* Panels */
         .panel { background: var(--panel); padding: 15px; border-radius: 6px; border: 1px solid var(--border); box-shadow: 0 1px 2px rgba(0,0,0,0.03); }
-        .sidebar { display: flex; flex-direction: column; gap: 15px; }
+        .sidebar { display: flex; flex-direction: column; gap: 15px; height: 100%; }
         h2 { margin: 0 0 10px 0; font-size: 1.1em; color: #334155; border-bottom: 1px solid var(--border); padding-bottom: 6px; }
         
         /* HR Controls */
@@ -74,6 +74,8 @@
         .text-warning { color: #fbbf24; }
         .text-info { color: var(--info); font-weight: normal; font-style: italic; background: rgba(14, 165, 233, 0.1); padding: 4px; border-radius: 3px; display: inline-block; width: 100%; box-sizing: border-box; }
         .text-special { color: #a78bfa; font-weight: bold; }
+        
+        .version-tag { text-align: center; font-size: 0.75em; color: var(--hint); margin-top: auto; padding-top: 15px; }
     </style>
 </head>
 <body>
@@ -81,7 +83,7 @@
 <div class="container">
     <div class="header">
         <div>
-            <h1>AdVantage Pro</h1>
+            <h1>Media Agency Simulator</h1>
             <div style="font-size: 0.8em; color: #94a3b8; margin-top: 2px;">Month <span id="monthDisplay" style="color: white; font-weight: bold; font-size: 1.2em;">1</span></div>
         </div>
         <div class="stat-block">
@@ -146,6 +148,10 @@
                 <div class="card-desc" id="eventDesc">Conditions stable.</div>
             </div>
         </div>
+        
+        <div class="version-tag">
+            Media Agency Simulator v1.1.0
+        </div>
     </div>
 
     <div class="panel" style="display: flex; flex-direction: column;">
@@ -204,7 +210,7 @@
         </div>
         
         <div class="log-area" id="logArea">
-            <div class="log-entry">System ready. Managing $500,000 for Month 1.</div>
+            <div class="log-entry">System ready. Managing $500,000 for Month 1. Note: Client budget will fluctuate dynamically based on your performance. Adjust staff accordingly!</div>
         </div>
     </div>
 </div>
@@ -277,7 +283,7 @@
         
         // 6-Month Memory Logic ensures scenarios don't repeat too soon
         let availableBriefs = briefKeys.filter(k => !state.briefHistory.includes(k));
-        if (availableBriefs.length === 0) availableBriefs = briefKeys; // Fallback just in case
+        if (availableBriefs.length === 0) availableBriefs = briefKeys; 
         
         state.currentBrief = availableBriefs[Math.floor(Math.random() * availableBriefs.length)];
         
