@@ -24,6 +24,16 @@
         .sidebar { display: flex; flex-direction: column; gap: 15px; height: 100%; }
         h2 { margin: 0 0 10px 0; font-size: 1.1em; color: #334155; border-bottom: 1px solid var(--border); padding-bottom: 6px; }
         
+        /* Market Context (Full Width) */
+        .market-panel { grid-column: 1 / -1; display: flex; flex-direction: column; gap: 10px; }
+        .market-grid { display: flex; gap: 15px; }
+        .market-grid .card { padding: 18px 24px; border-radius: 6px; border-left: 4px solid; margin: 0; display: flex; flex-direction: column; justify-content: center; }
+        .market-grid .brief-card { background: #eff6ff; border-color: var(--primary); flex: 2; }
+        .market-grid .event-card { background: #fff7ed; border-color: var(--warning); flex: 1; }
+        .market-grid .card-title { font-weight: bold; margin-bottom: 8px; display: block; font-size: 1.4em; color: #1e293b; }
+        .market-grid .card-desc { font-size: 1.15em; color: #334155; line-height: 1.5; }
+        .market-roas { margin-top: 12px; font-weight: bold; color: var(--primary); font-size: 1.25em; }
+
         /* HR Controls */
         .hr-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px; }
         .role-card { background: #f8fafc; border: 1px solid var(--border); padding: 8px; border-radius: 4px; text-align: center; }
@@ -38,13 +48,6 @@
         .hr-rules { font-size: 0.85em; text-align: center; margin-top: 8px; padding: 8px; border-radius: 4px; transition: all 0.3s ease; }
         .hr-rules.warning { background: #fffbeb; color: #b45309; border: 1px dashed #fcd34d; }
         .hr-rules.waived { background: #ecfdf5; color: #065f46; border: 1px solid #6ee7b7; }
-        
-        /* Brief & Market */
-        .card { padding: 12px; border-radius: 4px; margin-bottom: 10px; border-left: 3px solid; }
-        .brief-card { background: #eff6ff; border-color: var(--primary); }
-        .event-card { background: #fff7ed; border-color: var(--warning); }
-        .card-title { font-weight: bold; margin-bottom: 4px; display: block; font-size: 1em; }
-        .card-desc { font-size: 0.9em; color: #475569; line-height: 1.4; }
         
         /* Allocations */
         .allocation-header { display: flex; gap: 10px; margin-bottom: 15px; }
@@ -87,7 +90,7 @@
 <div class="container">
     <div class="header">
         <div>
-            <h1>Media Agency Simulator <span class="version-badge">v1.6.0</span></h1>
+            <h1>Media Agency Simulator <span class="version-badge">v1.7.0</span></h1>
             <div style="font-size: 0.85em; color: #94a3b8; margin-top: 2px;">Month <span id="monthDisplay" style="color: white; font-weight: bold; font-size: 1.2em;">1</span></div>
         </div>
         <div class="stat-block">
@@ -102,6 +105,21 @@
             <div class="stat-item" style="border-left: 1px solid #334155; padding-left: 20px;">
                 <span class="stat-label">Agency Balance</span>
                 <span class="stat-value" style="color: #34d399;">$<span id="agencyBalance">100,000</span></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel market-panel">
+        <h2 style="margin-bottom: 5px; font-size: 1.3em;">Market Context</h2>
+        <div class="market-grid">
+            <div class="card brief-card" id="briefCardBox">
+                <span class="card-title">Brief: <span id="briefTitle">Performance</span></span>
+                <div class="card-desc" id="briefDesc">Focus strictly on direct sales and immediate ROI. Brand building is secondary.</div>
+                <div class="market-roas">Target ROAS: <span id="targetRoas">2.5</span>x</div>
+            </div>
+            <div class="card event-card" id="eventCard">
+                <span class="card-title">Event: <span id="eventTitle">Normal Market</span></span>
+                <div class="card-desc" id="eventDesc">Conditions stable.</div>
             </div>
         </div>
     </div>
@@ -180,19 +198,6 @@
             </div>
             <div class="hr-rules warning" id="hrRulesBox">
                 ⚠️ <strong>Without HR Mgr:</strong> Hiring costs $5k. Firing costs 2x Salary.
-            </div>
-        </div>
-
-        <div class="panel">
-            <h2>Market Context</h2>
-            <div class="card brief-card" id="briefCardBox">
-                <span class="card-title">Brief: <span id="briefTitle">Performance</span></span>
-                <div class="card-desc" id="briefDesc">Focus strictly on direct sales and immediate ROI. Brand building is secondary.</div>
-                <div style="margin-top: 6px; font-weight: bold; color: var(--primary);">Target ROAS: <span id="targetRoas">2.5</span>x</div>
-            </div>
-            <div class="card event-card" id="eventCard">
-                <span class="card-title">Event: <span id="eventTitle">Normal Market</span></span>
-                <div class="card-desc" id="eventDesc">Conditions stable.</div>
             </div>
         </div>
     </div>
@@ -277,7 +282,7 @@
         </div>
         
         <div class="log-area" id="logArea">
-            <div class="log-entry">System v1.6.0 initialized. Watch your Total Headcount! As you scale, you will be forced to hire VPs and a COO.</div>
+            <div class="log-entry">System v1.7.0 initialized. Watch your Total Headcount! As you scale, you will be forced to hire VPs and a COO.</div>
         </div>
     </div>
 </div>
