@@ -6,16 +6,16 @@
     <title>Media Agency Simulator</title>
     <style>
         :root { --bg: #f4f5f7; --text: #1e293b; --panel: #ffffff; --primary: #3b82f6; --success: #10b981; --danger: #ef4444; --warning: #f59e0b; --info: #0ea5e9; --border: #e2e8f0; --hint: #64748b; }
-        body { font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding: 15px; font-size: 14px; line-height: 1.4; }
-        .container { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: 340px 1fr; gap: 15px; align-items: start; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding: 15px; font-size: 13px; line-height: 1.4; }
+        .container { max-width: 1500px; margin: 0 auto; display: grid; grid-template-columns: 340px 1fr; gap: 15px; align-items: start; }
         
         /* Header */
         .header { grid-column: 1 / -1; display: flex; justify-content: space-between; align-items: center; background: #0f172a; color: white; padding: 12px 20px; border-radius: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-        .header h1 { margin: 0; font-size: 1.4em; letter-spacing: -0.5px; }
+        .header h1 { margin: 0; font-size: 1.5em; letter-spacing: -0.5px; }
         .stat-block { display: flex; gap: 20px; align-items: center; text-align: right; }
         .stat-item { display: flex; flex-direction: column; justify-content: center; }
         .stat-label { font-size: 0.75em; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; }
-        .stat-value { font-size: 1.2em; font-weight: bold; }
+        .stat-value { font-size: 1.3em; font-weight: bold; }
         
         /* Panels */
         .panel { background: var(--panel); padding: 15px; border-radius: 6px; border: 1px solid var(--border); box-shadow: 0 1px 2px rgba(0,0,0,0.03); }
@@ -25,57 +25,57 @@
         /* HR Controls */
         .hr-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px; }
         .role-card { background: #f8fafc; border: 1px solid var(--border); padding: 8px; border-radius: 4px; text-align: center; }
-        .role-info { font-size: 0.8em; margin-bottom: 6px; color: #475569; }
+        .role-info { font-size: 0.85em; margin-bottom: 6px; color: #475569; }
         .role-info strong { display: block; color: var(--text); }
         .role-controls { display: flex; justify-content: center; align-items: center; gap: 8px; }
         .role-controls button { width: 24px; height: 24px; border-radius: 4px; border: 1px solid #cbd5e1; background: white; cursor: pointer; color: var(--text); font-weight: bold; }
         .role-controls button:hover { background: #e2e8f0; }
         .role-controls span { font-weight: bold; font-size: 1.1em; width: 16px; }
-        .payroll-alert { background: #fffbeb; color: #b45309; padding: 8px; border-radius: 4px; text-align: center; font-size: 0.85em; border: 1px solid #fde68a; margin-top: 5px; }
+        .payroll-alert { background: #fffbeb; color: #b45309; padding: 8px; border-radius: 4px; text-align: center; font-size: 0.9em; border: 1px solid #fde68a; margin-top: 5px; }
         
         /* Brief & Market */
-        .card { padding: 10px 12px; border-radius: 4px; margin-bottom: 10px; border-left: 3px solid; }
+        .card { padding: 12px; border-radius: 4px; margin-bottom: 10px; border-left: 3px solid; }
         .brief-card { background: #eff6ff; border-color: var(--primary); }
         .event-card { background: #fff7ed; border-color: var(--warning); }
-        .card-title { font-weight: bold; margin-bottom: 2px; display: block; font-size: 0.95em; }
-        .card-desc { font-size: 0.85em; color: #475569; }
+        .card-title { font-weight: bold; margin-bottom: 4px; display: block; font-size: 1em; }
+        .card-desc { font-size: 0.9em; color: #475569; line-height: 1.4; }
         
         /* Allocations */
         .allocation-header { display: flex; gap: 10px; margin-bottom: 15px; }
         .tracker { flex: 1; background: #f8fafc; border: 1px solid var(--border); padding: 10px; border-radius: 4px; text-align: center; transition: all 0.3s ease; }
         .tracker-label { font-size: 0.75em; text-transform: uppercase; color: var(--hint); font-weight: 600; display: block; margin-bottom: 2px; }
-        .tracker-value { font-size: 1.3em; font-weight: bold; }
+        .tracker-value { font-size: 1.4em; font-weight: bold; }
         .budget-flash { background-color: #dbeafe !important; border-color: #3b82f6 !important; }
         
         .channels-layout { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
-        .channel-group-title { font-size: 0.85em; text-transform: uppercase; font-weight: bold; color: #94a3b8; margin-bottom: 8px; letter-spacing: 0.5px; }
-        .channel-list { display: flex; flex-direction: column; gap: 6px; }
-        .input-row { display: flex; justify-content: space-between; align-items: center; background: white; border: 1px solid var(--border); padding: 6px 10px; border-radius: 4px; transition: border-color 0.15s; }
+        .channel-group-title { font-size: 0.85em; text-transform: uppercase; font-weight: bold; color: #1e293b; margin-bottom: 8px; letter-spacing: 0.5px; border-bottom: 2px solid #e2e8f0; padding-bottom: 4px;}
+        .channel-list { display: flex; flex-direction: column; gap: 5px; margin-bottom: 15px;}
+        .input-row { display: flex; justify-content: space-between; align-items: center; background: white; border: 1px solid var(--border); padding: 5px 8px; border-radius: 4px; transition: border-color 0.15s; }
         .input-row:focus-within { border-color: var(--primary); box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1); }
         .ch-info { flex: 1; }
         .ch-info label { font-weight: 600; font-size: 0.9em; display: block; }
-        .ch-info .hint { font-size: 0.75em; color: var(--hint); }
+        .ch-info .hint { font-size: 0.75em; color: var(--hint); display: block; margin-top: 1px;}
         .ch-input { display: flex; align-items: center; }
         .ch-input span { color: var(--hint); font-size: 0.9em; margin-right: 4px; }
-        .input-row input { width: 90px; padding: 4px 6px; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 0.95em; text-align: right; }
+        .input-row input { width: 85px; padding: 4px 6px; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 0.95em; text-align: right; }
         .input-row input:focus { outline: none; }
         
         /* Execution & Logs */
         .action-bar { display: flex; gap: 15px; margin-top: 15px; align-items: center; }
-        .btn-run { background: var(--success); color: white; border: none; padding: 12px 24px; font-size: 1.1em; border-radius: 4px; cursor: pointer; font-weight: bold; transition: opacity 0.2s; flex: 1; }
+        .btn-run { background: var(--success); color: white; border: none; padding: 14px 24px; font-size: 1.2em; border-radius: 4px; cursor: pointer; font-weight: bold; transition: opacity 0.2s; flex: 1; text-transform: uppercase; letter-spacing: 1px;}
         .btn-run:hover { opacity: 0.9; }
         .btn-run:disabled { background: #94a3b8; cursor: not-allowed; opacity: 1; }
         
-        .log-area { max-height: 250px; overflow-y: auto; font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; background: #0f172a; color: #e2e8f0; padding: 12px; border-radius: 4px; font-size: 0.85em; margin-top: 15px; }
+        .log-area { max-height: 280px; overflow-y: auto; font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; background: #0f172a; color: #e2e8f0; padding: 12px; border-radius: 4px; font-size: 0.9em; margin-top: 15px; line-height: 1.5;}
         .log-entry { margin-bottom: 8px; padding-bottom: 8px; border-bottom: 1px solid #334155; }
         .log-entry:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
         .text-success { color: #34d399; }
         .text-danger { color: #f87171; }
         .text-warning { color: #fbbf24; }
-        .text-info { color: var(--info); font-weight: normal; font-style: italic; background: rgba(14, 165, 233, 0.1); padding: 4px; border-radius: 3px; display: inline-block; width: 100%; box-sizing: border-box; }
+        .text-info { color: var(--info); font-weight: normal; font-style: italic; background: rgba(14, 165, 233, 0.1); padding: 6px; border-radius: 3px; display: inline-block; width: 100%; box-sizing: border-box; }
         .text-special { color: #a78bfa; font-weight: bold; }
         
-        .version-tag { text-align: center; font-size: 0.75em; color: var(--hint); margin-top: auto; padding-top: 15px; }
+        .version-tag { text-align: center; font-size: 0.8em; color: var(--hint); margin-top: auto; padding-top: 15px; }
     </style>
 </head>
 <body>
@@ -84,7 +84,7 @@
     <div class="header">
         <div>
             <h1>Media Agency Simulator</h1>
-            <div style="font-size: 0.8em; color: #94a3b8; margin-top: 2px;">Month <span id="monthDisplay" style="color: white; font-weight: bold; font-size: 1.2em;">1</span></div>
+            <div style="font-size: 0.85em; color: #94a3b8; margin-top: 2px;">Month <span id="monthDisplay" style="color: white; font-weight: bold; font-size: 1.2em;">1</span></div>
         </div>
         <div class="stat-block">
             <div class="stat-item">
@@ -150,7 +150,7 @@
         </div>
         
         <div class="version-tag">
-            Media Agency Simulator v1.1.0
+            Media Agency Simulator v1.2.0
         </div>
     </div>
 
@@ -174,20 +174,20 @@
             <div>
                 <div class="channel-group-title">Digital Performance</div>
                 <div class="channel-list">
-                    <div class="input-row"><div class="ch-info"><label>Paid Search</label><span class="hint">High intent</span></div><div class="ch-input"><span>$</span><input type="number" id="ch_ppc" value="0" min="0" oninput="validateForm()"></div></div>
+                    <div class="input-row"><div class="ch-info"><label>Paid Search (PPC)</label><span class="hint">High intent</span></div><div class="ch-input"><span>$</span><input type="number" id="ch_ppc" value="0" min="0" oninput="validateForm()"></div></div>
                     <div class="input-row"><div class="ch-info"><label>Paid Social</label><span class="hint">Scaleable</span></div><div class="ch-input"><span>$</span><input type="number" id="ch_social" value="0" min="0" oninput="validateForm()"></div></div>
                     <div class="input-row"><div class="ch-info"><label>Programmatic</label><span class="hint">Cheap reach</span></div><div class="ch-input"><span>$</span><input type="number" id="ch_prog" value="0" min="0" oninput="validateForm()"></div></div>
-                    <div class="input-row"><div class="ch-info"><label>Affiliate</label><span class="hint">Low risk</span></div><div class="ch-input"><span>$</span><input type="number" id="ch_affiliate" value="0" min="0" oninput="validateForm()"></div></div>
+                    <div class="input-row"><div class="ch-info"><label>Retail Media (Amazon)</label><span class="hint">Highest ROAS, expensive</span></div><div class="ch-input"><span>$</span><input type="number" id="ch_retail" value="0" min="0" oninput="validateForm()"></div></div>
+                    <div class="input-row"><div class="ch-info"><label>Affiliate Marketing</label><span class="hint">Low risk</span></div><div class="ch-input"><span>$</span><input type="number" id="ch_affiliate" value="0" min="0" oninput="validateForm()"></div></div>
                     <div class="input-row"><div class="ch-info"><label>SEO (Invest)</label><span class="hint">Builds momentum</span></div><div class="ch-input"><span>$</span><input type="number" id="ch_seo" value="0" min="0" oninput="validateForm()"></div></div>
                 </div>
-            </div>
 
-            <div>
-                <div class="channel-group-title">Direct Marketing</div>
+                <div class="channel-group-title">Direct & Retention</div>
                 <div class="channel-list">
                     <div class="input-row"><div class="ch-info"><label>Email Blasts</label><span class="hint">Fatigues > $10k</span></div><div class="ch-input"><span>$</span><input type="number" id="ch_email" value="0" min="0" oninput="validateForm()"></div></div>
                     <div class="input-row"><div class="ch-info"><label>SMS</label><span class="hint">Fatigues > $5k</span></div><div class="ch-input"><span>$</span><input type="number" id="ch_sms" value="0" min="0" oninput="validateForm()"></div></div>
-                    <div class="input-row"><div class="ch-info"><label>Direct Mail</label><span class="hint">Physical format</span></div><div class="ch-input"><span>$</span><input type="number" id="ch_mail" value="0" min="0" oninput="validateForm()"></div></div>
+                    <div class="input-row"><div class="ch-info"><label>Telemarketing</label><span class="hint">Steady 1.2x. Annoys clients.</span></div><div class="ch-input"><span>$</span><input type="number" id="ch_telemarketing" value="0" min="0" oninput="validateForm()"></div></div>
+                    <div class="input-row"><div class="ch-info"><label>Loyalty Apps</label><span class="hint">Boosts Email/SMS forever</span></div><div class="ch-input"><span>$</span><input type="number" id="ch_loyalty" value="0" min="0" oninput="validateForm()"></div></div>
                 </div>
             </div>
 
@@ -195,10 +195,34 @@
                 <div class="channel-group-title">Brand & Awareness</div>
                 <div class="channel-list">
                     <div class="input-row"><div class="ch-info"><label>Linear TV</label><span class="hint">$50k min. Builds Halo</span></div><div class="ch-input"><span>$</span><input type="number" id="ch_tv" value="0" min="0" oninput="validateForm()"></div></div>
-                    <div class="input-row"><div class="ch-info"><label>Billboards</label><span class="hint">Safe return</span></div><div class="ch-input"><span>$</span><input type="number" id="ch_billboard" value="0" min="0" oninput="validateForm()"></div></div>
+                    <div class="input-row"><div class="ch-info"><label>Connected TV (CTV)</label><span class="hint">$10k min. Fatigues > $15k</span></div><div class="ch-input"><span>$</span><input type="number" id="ch_ctv" value="0" min="0" oninput="validateForm()"></div></div>
+                    <div class="input-row"><div class="ch-info"><label>Billboards</label><span class="hint">Safe return floor</span></div><div class="ch-input"><span>$</span><input type="number" id="ch_billboard" value="0" min="0" oninput="validateForm()"></div></div>
                     <div class="input-row"><div class="ch-info"><label>Cinema Ads</label><span class="hint">Local awareness</span></div><div class="ch-input"><span>$</span><input type="number" id="ch_cinema" value="0" min="0" oninput="validateForm()"></div></div>
                     <div class="input-row"><div class="ch-info"><label>Podcasts</label><span class="hint">Deep engagement</span></div><div class="ch-input"><span>$</span><input type="number" id="ch_podcast" value="0" min="0" oninput="validateForm()"></div></div>
                     <div class="input-row"><div class="ch-info"><label>Influencers</label><span class="hint">Boom or bust</span></div><div class="ch-input"><span>$</span><input type="number" id="ch_influencer" value="0" min="0" oninput="validateForm()"></div></div>
+                </div>
+
+                <div class="channel-group-title">PR & Content</div>
+                <div class="channel-list">
+                    <div class="input-row"><div class="ch-info"><label>Press Releases</label><span class="hint">> $5k restores Patience</span></div><div class="ch-input"><span>$</span><input type="number" id="ch_pr" value="0" min="0" oninput="validateForm()"></div></div>
+                    <div class="input-row"><div class="ch-info"><label>Branded Content</label><span class="hint">Boosts SEO instantly</span></div><div class="ch-input"><span>$</span><input type="number" id="ch_branded" value="0" min="0" oninput="validateForm()"></div></div>
+                </div>
+            </div>
+
+            <div>
+                <div class="channel-group-title">Real World & B2B</div>
+                <div class="channel-list">
+                    <div class="input-row"><div class="ch-info"><label>Direct Mail</label><span class="hint">Physical format</span></div><div class="ch-input"><span>$</span><input type="number" id="ch_mail" value="0" min="0" oninput="validateForm()"></div></div>
+                    <div class="input-row"><div class="ch-info"><label>Experiential Stunt</label><span class="hint">$15k flat. 30% huge boom.</span></div><div class="ch-input"><span>$</span><input type="number" id="ch_experiential" value="0" min="0" step="15000" oninput="validateForm()"></div></div>
+                    <div class="input-row"><div class="ch-info"><label>Transit & OOH</label><span class="hint">Boosted by Programmatic</span></div><div class="ch-input"><span>$</span><input type="number" id="ch_transit" value="0" min="0" oninput="validateForm()"></div></div>
+                    <div class="input-row"><div class="ch-info"><label>Print/Trade Journals</label><span class="hint">B2B Anchor</span></div><div class="ch-input"><span>$</span><input type="number" id="ch_print" value="0" min="0" oninput="validateForm()"></div></div>
+                    <div class="input-row"><div class="ch-info"><label>Webinars</label><span class="hint">Cost $5k, then massive ROI</span></div><div class="ch-input"><span>$</span><input type="number" id="ch_webinar" value="0" min="0" oninput="validateForm()"></div></div>
+                </div>
+
+                <div class="channel-group-title">Niche & Wildcards</div>
+                <div class="channel-list">
+                    <div class="input-row"><div class="ch-info"><label>In-Game / Esports</label><span class="hint">Gen-Z Boom or Bust</span></div><div class="ch-input"><span>$</span><input type="number" id="ch_ingame" value="0" min="0" oninput="validateForm()"></div></div>
+                    <div class="input-row"><div class="ch-info"><label>Community (Reddit)</label><span class="hint">Backlash if > $2k</span></div><div class="ch-input"><span>$</span><input type="number" id="ch_community" value="0" min="0" oninput="validateForm()"></div></div>
                 </div>
             </div>
         </div>
@@ -210,47 +234,55 @@
         </div>
         
         <div class="log-area" id="logArea">
-            <div class="log-entry">System ready. Managing $500,000 for Month 1. Note: Client budget will fluctuate dynamically based on your performance. Adjust staff accordingly!</div>
+            <div class="log-entry">System v1.2.0 initialized. Read channel hints carefully! 25 Channels are now unlocked.</div>
         </div>
     </div>
 </div>
 
 <script>
     let state = { 
-        month: 1, balance: 100000, clientBudget: 500000, patience: 3, halo: 1.0, seo: 0, 
+        month: 1, balance: 100000, clientBudget: 500000, patience: 3, halo: 1.0, seo: 0, loyaltyBoost: false,
         hr: { ceo: 1, dir: 0, jr: 1, sr: 3 }, 
         briefHistory: [], currentBrief: 'Performance', currentEvent: 'Normal' 
     };
-    const channels = ['ppc', 'social', 'seo', 'prog', 'affiliate', 'email', 'sms', 'mail', 'tv', 'billboard', 'cinema', 'podcast', 'influencer'];
     
-    // 26 Unique Scenarios
+    const channels = [
+        'ppc', 'social', 'prog', 'retail', 'affiliate', 'seo', 
+        'email', 'sms', 'telemarketing', 'loyalty', 
+        'tv', 'ctv', 'billboard', 'cinema', 'podcast', 'influencer', 
+        'pr', 'branded', 
+        'mail', 'experiential', 'transit', 'print', 'webinar', 
+        'ingame', 'community'
+    ];
+    
+    // Updated & New Scenarios
     const briefs = {
-        'Performance': { target: 2.5, special: false, desc: "Focus strictly on direct sales and immediate ROI. Brand building is secondary.", bonuses: ['ppc', 'mail', 'email', 'sms', 'affiliate'], feedback: "Performance briefs demand high-intent channels (Paid Search) and direct-response formats (Email, SMS, Direct Mail)." },
-        'Awareness': { target: 1.2, special: false, desc: "Maximize reach and brand visibility. The client wants everyone to see their logo.", bonuses: ['tv', 'billboard', 'cinema', 'podcast', 'prog'], feedback: "Awareness requires cheap reach and large formats like TV, Billboards, and Cinema." },
-        'Retention': { target: 1.8, special: false, desc: "Focus on increasing the lifetime value of existing customers and reducing churn.", bonuses: ['social', 'email', 'influencer', 'sms'], feedback: "Retention relies on channels where you control the list (Email, SMS) or community platforms." },
+        'Performance': { target: 2.5, special: false, desc: "Focus strictly on direct sales and immediate ROI. Brand building is secondary.", bonuses: ['ppc', 'mail', 'email', 'sms', 'affiliate', 'retail'], feedback: "Performance briefs demand high-intent channels like Paid Search and Retail Media (Amazon)." },
+        'Awareness': { target: 1.2, special: false, desc: "Maximize reach and brand visibility. The client wants everyone to see their logo.", bonuses: ['tv', 'ctv', 'billboard', 'cinema', 'podcast', 'prog', 'transit'], feedback: "Awareness requires broad reach. TV, CTV, Transit, and Billboards are ideal for top-of-funnel branding." },
+        'Retention': { target: 1.8, special: false, desc: "Focus on increasing the lifetime value of existing customers and reducing churn.", bonuses: ['social', 'email', 'influencer', 'sms', 'loyalty'], feedback: "Retention relies on owned lists (Email, SMS) and engaging loyalty programs." },
         'CEO Vanity Project': { target: 0.8, special: true, desc: "The CEO just wants to see their own face online. Performance metrics do not matter.", bonuses: ['social', 'prog', 'podcast'], feedback: "To ensure a specific person sees an ad, you need granular IP targeting (Programmatic) and Paid Social." },
-        'B2B Event Blitz': { target: 1.5, special: true, desc: "Major industry trade show this month. Dominate the physical event and surrounding area.", bonuses: ['billboard', 'mail', 'email'], feedback: "Event marketing requires localized presence: Billboards near the venue, and Direct Mail to partner hotels." },
-        'PR Damage Control': { target: 0.5, special: true, desc: "An executive made a massive public blunder. Control the narrative immediately.", bonuses: ['ppc', 'tv', 'social'], feedback: "During a crisis, you must own the narrative via Paid Search, apology broadcasts (TV), and Social." },
-        'App Launch (Installs)': { target: 2.0, special: true, desc: "We are launching a new mobile app. Drive as many downloads as possible.", bonuses: ['social', 'affiliate', 'influencer'], feedback: "App installs thrive on social proof, influencer endorsements, and performance-based affiliate networks." },
-        'Rebranding Campaign': { target: 0.8, special: true, desc: "The company has a new logo and mission. Tell the world, don't worry about sales.", bonuses: ['tv', 'billboard', 'cinema', 'podcast'], feedback: "Rebranding needs mass reach and emotional storytelling, prioritizing traditional and audio-visual media." },
-        'Black Friday Blowout': { target: 3.5, special: true, desc: "It is the biggest shopping day of the year. Empty the warehouse!", bonuses: ['ppc', 'email', 'sms'], feedback: "High-intent periods require capturing existing demand (PPC) and leveraging owned audience lists (Email/SMS)." },
-        'Local Store Grand Opening': { target: 1.5, special: true, desc: "A new flagship physical store is opening. Drive foot traffic to the location.", bonuses: ['billboard', 'mail', 'cinema', 'social'], feedback: "Foot traffic requires hyper-local awareness like Billboards, localized Social, and Direct Mail." },
-        'Gen Z Product Drop': { target: 2.2, special: true, desc: "A limited-edition streetwear collab just dropped. Hype is everything.", bonuses: ['influencer', 'social', 'sms'], feedback: "Gen Z responds to authentic creator content (Influencers), social algorithms, and immediate SMS drops." },
-        'High-Ticket B2B Lead Gen': { target: 3.0, special: true, desc: "We need enterprise leads for a $100k software product.", bonuses: ['ppc', 'mail', 'podcast'], feedback: "Enterprise sales need search intent (PPC), direct executive outreach (Mail), and niche thought leadership (Podcasts)." },
-        'Political Campaign Sprint': { target: 1.0, special: true, desc: "Election day is weeks away. Blitz the voters and raise funds.", bonuses: ['tv', 'prog', 'sms', 'mail'], feedback: "Political campaigns blitz voters with TV spots, programmatic display, and constant SMS/Mail fundraising." },
-        'E-commerce Cart Abandonment': { target: 3.0, special: true, desc: "Thousands of users left items in their carts. Bring them back to checkout.", bonuses: ['email', 'prog', 'sms'], feedback: "Winning back lost carts relies on retargeting via Programmatic and direct nudges via Email/SMS." },
-        'Medicare Plan Enrollment': { target: 1.5, special: true, desc: "Targeting seniors aged 65+ to switch their healthcare plans.", bonuses: ['tv', 'mail', 'ppc'], feedback: "Older demographics index highly on Linear TV, physical Direct Mail, and direct Search." },
-        'Viral TikTok Challenge': { target: 1.2, special: true, desc: "We want to start a branded dance trend on short-form video platforms.", bonuses: ['influencer', 'social'], feedback: "Seeding a viral trend requires paying heavy-hitting Influencers and boosting their posts via Paid Social." },
-        'Niche Hobbyist Product': { target: 2.5, special: true, desc: "Selling $500 custom mechanical keyboards to enthusiasts.", bonuses: ['affiliate', 'podcast', 'seo'], feedback: "Niche communities are best reached through trusted podcast hosts, community affiliates, and long-tail SEO." },
-        'End of Q4 Budget Burn': { target: 0.8, special: true, desc: "The client has $500k left they MUST spend or lose next year. Spend it fast.", bonuses: ['prog', 'tv', 'billboard'], feedback: "When clients just need to spend budget quickly, buy high-volume, broad-reach inventory like TV and Programmatic." },
-        'Competitor Attack Ads': { target: 1.5, special: true, desc: "A rival launched a campaign against us. Fire back and steal their traffic.", bonuses: ['ppc', 'social', 'podcast'], feedback: "Defend your brand terms on PPC, address the community on Social, and sponsor Podcasts to shift the narrative." },
-        'Luxury Brand Exclusivity': { target: 1.0, special: true, desc: "Promoting a $10,000 watch. Avoid cheap placements; maintain prestige.", bonuses: ['cinema', 'mail', 'podcast'], feedback: "Luxury avoids cheap inventory, preferring high-production Cinema, premium catalogs, and high-end Podcasts." },
+        'B2B Event Blitz': { target: 1.5, special: true, desc: "Major industry trade show this month. Dominate the physical event and surrounding area.", bonuses: ['billboard', 'mail', 'email', 'experiential', 'transit'], feedback: "Event marketing requires localized presence: Billboards, Transit, Experiential Stunts, and Direct Mail." },
+        'PR Damage Control': { target: 0.5, special: true, desc: "An executive made a massive public blunder. Control the narrative immediately.", bonuses: ['ppc', 'tv', 'social', 'pr', 'branded'], feedback: "During a crisis, you must own the narrative via Press Releases, Branded Content, and apology broadcasts (TV)." },
+        'App Launch (Installs)': { target: 2.0, special: true, desc: "We are launching a new mobile app. Drive as many downloads as possible.", bonuses: ['social', 'affiliate', 'influencer', 'ingame'], feedback: "App installs thrive on social proof, In-Game ads, and performance-based affiliate networks." },
+        'Rebranding Campaign': { target: 0.8, special: true, desc: "The company has a new logo and mission. Tell the world, don't worry about sales.", bonuses: ['tv', 'ctv', 'billboard', 'cinema', 'branded'], feedback: "Rebranding needs mass reach and emotional storytelling, prioritizing traditional media and branded content." },
+        'Black Friday Blowout': { target: 3.5, special: true, desc: "It is the biggest shopping day of the year. Empty the warehouse!", bonuses: ['ppc', 'retail', 'email', 'sms'], feedback: "High-intent periods require capturing demand via Retail Media/PPC and leveraging owned audience lists." },
+        'Local Store Grand Opening': { target: 1.5, special: true, desc: "A new flagship physical store is opening. Drive foot traffic to the location.", bonuses: ['billboard', 'transit', 'cinema', 'experiential'], feedback: "Foot traffic requires hyper-local awareness like Billboards, Transit OOH, and Experiential stunts." },
+        'Gen Z Product Drop': { target: 2.2, special: true, desc: "A limited-edition streetwear collab just dropped. Hype is everything.", bonuses: ['influencer', 'social', 'sms', 'ingame', 'community'], feedback: "Gen Z responds to authentic creators, immediate SMS drops, Esports, and niche community outreach." },
+        'High-Ticket B2B Lead Gen': { target: 3.0, special: true, desc: "We need enterprise leads for a $100k software product.", bonuses: ['ppc', 'mail', 'webinar', 'print', 'telemarketing'], feedback: "Enterprise sales need Webinars, Print Journals, Telemarketing, and direct executive outreach (Mail)." },
+        'Political Campaign Sprint': { target: 1.0, special: true, desc: "Election day is weeks away. Blitz the voters and raise funds.", bonuses: ['tv', 'ctv', 'sms', 'telemarketing'], feedback: "Political campaigns blitz voters with TV/CTV spots, telemarketing, and constant SMS fundraising." },
+        'E-commerce Cart Abandonment': { target: 3.0, special: true, desc: "Thousands of users left items in their carts. Bring them back to checkout.", bonuses: ['email', 'prog', 'sms', 'retail'], feedback: "Winning back lost carts relies on retargeting via Programmatic and direct nudges via Email/SMS." },
+        'Medicare Plan Enrollment': { target: 1.5, special: true, desc: "Targeting seniors aged 65+ to switch their healthcare plans.", bonuses: ['tv', 'mail', 'print', 'telemarketing'], feedback: "Older demographics index highly on Linear TV, Print, Telemarketing, and physical Direct Mail." },
+        'Niche Hobbyist Product': { target: 2.5, special: true, desc: "Selling $500 custom mechanical keyboards to enthusiasts.", bonuses: ['affiliate', 'podcast', 'community', 'seo'], feedback: "Niche communities are best reached through trusted podcast hosts, Subreddits, and SEO." },
+        'End of Q4 Budget Burn': { target: 0.8, special: true, desc: "The client has $500k left they MUST spend or lose next year. Spend it fast.", bonuses: ['prog', 'tv', 'billboard', 'ctv'], feedback: "When clients just need to spend budget quickly, buy high-volume, broad-reach inventory like TV and CTV." },
+        'Competitor Attack Ads': { target: 1.5, special: true, desc: "A rival launched a campaign against us. Fire back and steal their traffic.", bonuses: ['ppc', 'social', 'pr', 'branded'], feedback: "Defend your brand terms on PPC, address the community on Social, and issue PR statements." },
+        'Luxury Brand Exclusivity': { target: 1.0, special: true, desc: "Promoting a $10,000 watch. Avoid cheap placements; maintain prestige.", bonuses: ['cinema', 'mail', 'podcast', 'print'], feedback: "Luxury avoids cheap inventory, preferring high-production Cinema, high-end Print, and premium Catalogs." },
         'Flash Sale (24 Hours)': { target: 3.5, special: true, desc: "Everything is 50% off, but only for today. We need instant eyeballs.", bonuses: ['sms', 'email', 'social'], feedback: "Flash sales need instant delivery. SMS and Email bypass algorithms to guarantee immediate eyeballs." },
-        'New Movie Premiere': { target: 1.2, special: true, desc: "A blockbuster movie opens this weekend. Pack the theaters.", bonuses: ['tv', 'cinema', 'billboard', 'social'], feedback: "Entertainment relies on visual spectacle and mass awareness right before opening weekend." },
-        'Seed Funding Announcement': { target: 0.5, special: true, desc: "A startup raised $5M. They want to attract talent and future VCs.", bonuses: ['podcast', 'prog'], feedback: "Announcing funding is about reaching specific professionals, prioritizing niche Podcasts and B2B Programmatic." },
-        'Subscription Box Churn': { target: 2.0, special: true, desc: "Subscribers are canceling after month 3. Keep them engaged.", bonuses: ['email', 'sms', 'mail'], feedback: "Keeping subscribers requires personalized communication via Email, SMS, and tangible Direct Mail gifts." },
-        'Long-Term Content Play': { target: 1.5, special: true, desc: "Building a library of 'How-To' content for future organic traffic.", bonuses: ['seo', 'podcast', 'affiliate'], feedback: "Evergreen content builds over time. Invest in SEO, educational Podcasts, and content-driven Affiliates." },
-        'Influencer Apology Tour': { target: 0.8, special: true, desc: "Our brand ambassador messed up. Help them rebuild their image.", bonuses: ['podcast', 'social'], feedback: "Rebuilding trust requires long-form, unedited conversations (Podcasts) and direct community management (Social)." }
+        'Amazon Prime Day Prep': { target: 3.0, special: true, desc: "Prime Day is here. Dominate the e-commerce giant's ecosystem.", bonuses: ['retail', 'ppc', 'affiliate'], feedback: "When playing on Amazon, you must buy Retail Media Networks and push external Affiliate traffic." },
+        'Subreddit Launch Strategy': { target: 2.0, special: true, desc: "We are trying to win over a highly skeptical online community.", bonuses: ['community', 'podcast', 'influencer'], feedback: "Skeptical communities require authentic, soft-sell sponsorships like Reddit buys and trusted Podcasters." },
+        'B2B Software Demo Push': { target: 2.5, special: true, desc: "Our sales team needs qualified demos for a new SaaS platform.", bonuses: ['webinar', 'print', 'telemarketing', 'prog'], feedback: "Demos require educational investment like Webinars, paired with targeted Telemarketing and Trade Journals." },
+        'Subscription Box Churn': { target: 2.0, special: true, desc: "Subscribers are canceling after month 3. Keep them engaged.", bonuses: ['email', 'sms', 'loyalty', 'mail'], feedback: "Keeping subscribers requires Loyalty programs, personalized Email/SMS, and tangible Direct Mail gifts." },
+        'Long-Term Content Play': { target: 1.5, special: true, desc: "Building a library of content for future organic traffic dominance.", bonuses: ['seo', 'branded', 'podcast'], feedback: "Evergreen content builds over time. Invest heavily in SEO, Branded Content, and educational Podcasts." },
+        'Apology Tour Phase 2': { target: 0.8, special: true, desc: "The crisis is passing, but we need to rebuild long-term trust.", bonuses: ['pr', 'branded', 'tv'], feedback: "Rebuilding trust requires long-form Branded Content, ongoing Press Releases, and reassuring TV spots." }
     };
     
     const events = [
@@ -281,7 +313,6 @@
     function setupNextMonth() {
         const briefKeys = Object.keys(briefs);
         
-        // 6-Month Memory Logic ensures scenarios don't repeat too soon
         let availableBriefs = briefKeys.filter(k => !state.briefHistory.includes(k));
         if (availableBriefs.length === 0) availableBriefs = briefKeys; 
         
@@ -359,43 +390,83 @@
 
     function log(msg, type="") {
         const area = document.getElementById('logArea');
-        area.innerHTML = `<div class="log-entry ${type}">${type !== 'text-info' ? `[M${state.month}] ` : ''}${msg}</div>` + area.innerHTML;
+        area.innerHTML = `<div class="log-entry ${type}">${type !== 'text-info' && type !== 'text-special' ? `[M${state.month}] ` : ''}${msg}</div>` + area.innerHTML;
     }
 
     function runMonth() {
         let s = {}; let mediaSpend = 0;
         channels.forEach(ch => { s[ch] = parseInt(document.getElementById('ch_' + ch).value) || 0; mediaSpend += s[ch]; });
 
-        if(s.tv > 0 && s.tv < 50000) return alert("Linear TV requires a $50k minimum spend at this scale.");
+        // Channel Rules
+        if(s.tv > 0 && s.tv < 50000) return alert("Linear TV requires a $50k minimum spend.");
+        if(s.ctv > 0 && s.ctv < 10000) return alert("CTV requires a $10k minimum spend.");
+        if(s.experiential > 0 && s.experiential !== 15000) return alert("Experiential Stunts require exactly a $15,000 flat fee.");
 
         let payroll = (state.hr.ceo * 15000) + (state.hr.dir * 12000) + (state.hr.jr * 3000) + (state.hr.sr * 8000);
         state.balance -= payroll;
         
         if (state.balance < 0) { 
             document.getElementById('agencyBalance').innerText = fmt(Math.round(state.balance)); 
-            log(`BANKRUPT. Overhead of $${fmt(payroll)} pushed you into the red. GAME OVER.`, "text-danger"); 
+            log(`[M${state.month}] BANKRUPT. Overhead of $${fmt(payroll)} pushed you into the red. GAME OVER.`, "text-danger"); 
             document.getElementById('runBtn').disabled = true; 
             return; 
         }
 
+        // Processing Game Mechanics
         state.halo = Math.max(1.0, state.halo - 0.05);
         if(s.tv >= 50000) state.halo += 0.25;
-        state.seo += (s.seo * 0.3);
+        
+        if(s.loyalty > 0) state.loyaltyBoost = true;
+        let lBoost = state.loyaltyBoost ? 1.5 : 1.0;
+
+        if(s.pr >= 5000 && state.patience < 5) { state.patience++; log(`[M${state.month}] PR Campaign restored 1 Patience ⭐.`, "text-success"); }
+        if(s.telemarketing > 15000 && Math.random() < 0.3) { state.patience--; log(`[M${state.month}] Telemarketing annoyed clients! Lost 1 Patience ⭐.`, "text-danger"); }
+        
+        let stuntReturn = 0;
+        if(s.experiential === 15000) {
+            if(Math.random() < 0.3) { stuntReturn = 15000 * 5.0; state.halo += 0.5; log(`[M${state.month}] Stunt went VIRAL! Massive ROAS & Halo Boost.`, "text-success"); } 
+            else { log(`[M${state.month}] Experiential Stunt failed. Yielded $0.`, "text-warning"); }
+        }
+
+        let communityReturn = s.community <= 2000 ? s.community * (2.0 + Math.random()) : 0;
+        if(s.community > 2000) log(`[M${state.month}] You spent too much on Community ads! Users revolted. $0 return.`, "text-danger");
+
+        state.seo += (s.seo * 0.3) + (s.branded * 0.8);
 
         let srBuff = 1.0 + (state.hr.sr * 0.05); 
+
         let returns = {
-            ppc: s.ppc * (1.2 + Math.random()) * state.halo, social: s.social * (0.5 + Math.random() * 2) * srBuff,
-            seo: state.seo * (1.0 + Math.random()), prog: s.prog * (0.8 + Math.random() * 0.5) * state.halo,
-            affiliate: s.affiliate * 1.5, email: s.email <= 10000 ? s.email * 3 : (10000 * 3) + ((s.email - 10000) * 0.1),
-            sms: s.sms <= 5000 ? s.sms * 4 : (5000 * 4) + ((s.sms - 5000) * 0.05), mail: s.mail * (1.1 + Math.random() * 0.8),
-            tv: s.tv * 0.9, billboard: s.billboard * 1.1, cinema: s.cinema * (0.8 + Math.random()),
-            podcast: s.podcast * (1.0 + Math.random()), influencer: s.influencer * (Math.random() * 4) * srBuff
+            ppc: s.ppc * (1.2 + Math.random()) * state.halo, 
+            social: s.social * (0.5 + Math.random() * 2) * srBuff,
+            prog: s.prog * (0.8 + Math.random() * 0.5) * state.halo,
+            retail: s.retail * (1.8 + Math.random() * 0.5),
+            affiliate: s.affiliate * 1.5, 
+            seo: state.seo * (1.0 + Math.random()), 
+            email: (s.email <= 10000 ? s.email * 3 : (10000 * 3) + ((s.email - 10000) * 0.1)) * lBoost,
+            sms: (s.sms <= 5000 ? s.sms * 4 : (5000 * 4) + ((s.sms - 5000) * 0.05)) * lBoost, 
+            telemarketing: s.telemarketing * 1.2,
+            loyalty: s.loyalty * 0.5,
+            tv: s.tv * 0.9, 
+            ctv: s.ctv <= 15000 ? s.ctv * (1.1 + Math.random()) * state.halo : (15000 * (1.1 + Math.random()) * state.halo) + ((s.ctv - 15000) * 0.2),
+            billboard: s.billboard * 1.1, 
+            cinema: s.cinema * (0.8 + Math.random()),
+            podcast: s.podcast * (1.0 + Math.random()), 
+            influencer: s.influencer * (Math.random() * 4) * srBuff,
+            pr: s.pr * 0.2,
+            branded: s.branded * 0.9,
+            mail: s.mail * (1.1 + Math.random() * 0.8),
+            experiential: stuntReturn,
+            transit: s.transit * (s.prog > 0 ? 1.6 : 0.8),
+            print: s.print * 0.7,
+            webinar: s.webinar > 5000 ? (s.webinar - 5000) * 3.0 : 0,
+            ingame: s.ingame * (Math.random() < 0.25 ? 4.5 : 0.3),
+            community: communityReturn
         };
 
         if(state.currentEvent === 'Privacy Update') { returns.social *= 0.6; returns.prog *= 0.6; }
         if(state.currentEvent === 'Holiday Rush') { for(let k in returns) returns[k] *= 1.4; }
         if(state.currentEvent === 'Viral Meme') { returns.social *= 2.0; returns.influencer *= 2.0; }
-        if(state.currentEvent === 'Competitor Collapsed') { returns.ppc *= 1.5; returns.affiliate *= 1.5; }
+        if(state.currentEvent === 'Competitor Collapsed') { returns.ppc *= 1.5; returns.affiliate *= 1.5; returns.retail *= 1.5; }
 
         let briefRules = briefs[state.currentBrief];
         briefRules.bonuses.forEach(b => { if(returns[b]) returns[b] *= 1.3; });
@@ -410,30 +481,26 @@
         if(roas >= briefRules.target) {
             fee = mediaSpend * 0.15; 
             state.balance += fee; 
-            
             let increase = state.clientBudget * budgetChangePct;
             state.clientBudget += increase;
-
-            msg += `Target Hit! Earned $${fmt(Math.round(fee))} (15%). Client increased budget by ${(budgetChangePct*100).toFixed(1)}%!`;
-            log(msg, "text-success"); 
+            msg += `Target Hit! Earned $${fmt(Math.round(fee))} (15%). Budget ⬆️ ${(budgetChangePct*100).toFixed(1)}%.`;
+            log(`[M${state.month}] ` + msg, "text-success"); 
             if(roas > briefRules.target + 0.5 && state.patience < 5) state.patience++;
         } else {
             fee = mediaSpend * 0.05;
             state.balance += fee;
             state.patience--; 
-            
             let decrease = state.clientBudget * budgetChangePct;
             state.clientBudget -= decrease;
-
-            msg += `Missed target of ${briefRules.target}x. Earned $${fmt(Math.round(fee))} (5%). Client slashed budget by ${(budgetChangePct*100).toFixed(1)}%.`; 
-            log(msg, "text-warning");
+            msg += `Missed target of ${briefRules.target}x. Earned $${fmt(Math.round(fee))} (5%). Budget ⬇️ ${(budgetChangePct*100).toFixed(1)}%.`; 
+            log(`[M${state.month}] ` + msg, "text-warning");
         }
 
         log(`💡 <strong>Agency Insight:</strong> ${briefRules.feedback}`, "text-info");
 
         if (state.patience <= 0) {
             document.getElementById('patienceDisplay').innerText = "NONE"; updateMood();
-            log("FIRED BY CLIENT. GAME OVER.", "text-danger"); document.getElementById('runBtn').disabled = true; return;
+            log(`[M${state.month}] FIRED BY CLIENT. GAME OVER.`, "text-danger"); document.getElementById('runBtn').disabled = true; return;
         }
 
         state.month++;
