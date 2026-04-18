@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Media Agency Sim: Edutainment Edition</title>
+    <title>Media Agency Sim: Agency Operations Edition</title>
     <style>
         :root { --bg: #f4f5f7; --text: #1e293b; --panel: #ffffff; --primary: #3b82f6; --success: #10b981; --danger: #ef4444; --warning: #f59e0b; --info: #0ea5e9; --border: #e2e8f0; --hint: #64748b; }
         body { font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding: 15px; font-size: 14px; line-height: 1.4; }
@@ -92,8 +92,8 @@
                 <span class="stat-value"><span id="patienceDisplay">⭐⭐⭐</span> <span id="moodDisplay">😀</span></span>
             </div>
             <div class="stat-item" style="border-left: 1px solid #334155; padding-left: 20px;">
-                <span class="stat-label">Agency Bank</span>
-                <span class="stat-value" style="color: #34d399;">$<span id="agencyFunds">25000</span></span>
+                <span class="stat-label">Agency Balance</span>
+                <span class="stat-value" style="color: #34d399;">$<span id="agencyBalance">100,000</span></span>
             </div>
         </div>
     </div>
@@ -116,7 +116,7 @@
                 </div>
             </div>
             <div class="payroll-alert">
-                Payroll (Deducted from Client): <strong>-$<span id="payrollTotal">3000</span></strong>
+                Payroll (Deducted from Agency): <strong>-$<span id="payrollTotal">3,000</span></strong>
             </div>
         </div>
 
@@ -141,8 +141,8 @@
                 <span class="tracker-value" id="allocatedTotal" style="color: var(--primary);">$0</span>
             </div>
             <div class="tracker">
-                <span class="tracker-label">Media Budget (Post-Payroll)</span>
-                <span class="tracker-value" id="availableMedia">$97,000</span>
+                <span class="tracker-label">Client Budget</span>
+                <span class="tracker-value" id="clientBudgetTracker">$100,000</span>
             </div>
             <div class="tracker">
                 <span class="tracker-label">Staffing Capacity</span>
@@ -196,10 +196,9 @@
 </div>
 
 <script>
-    let state = { month: 1, funds: 25000, clientBudget: 100000, patience: 3, halo: 1.0, seo: 0, hr: { jr: 1, sr: 0 }, currentBrief: 'Performance', currentEvent: 'Normal' };
+    let state = { month: 1, balance: 100000, clientBudget: 100000, patience: 3, halo: 1.0, seo: 0, hr: { jr: 1, sr: 0 }, currentBrief: 'Performance', currentEvent: 'Normal' };
     const channels = ['ppc', 'social', 'seo', 'prog', 'affiliate', 'email', 'sms', 'mail', 'tv', 'billboard', 'cinema', 'podcast', 'influencer'];
     
-    // UPDATED BRIEFS - No hints in desc, feedback added for learning.
     const briefs = {
         'Performance': { 
             target: 2.5, special: false, 
@@ -298,27 +297,24 @@
     function validateForm() {
         let payroll = (state.hr.jr * 3000) + (state.hr.sr * 8000);
         let capacity = (state.hr.jr * 30000) + (state.hr.sr * 80000);
-        let availableMediaBudget = state.clientBudget - payroll;
         
         let mediaSpend = 0;
         channels.forEach(ch => mediaSpend += parseInt(document.getElementById('ch_' + ch).value) || 0);
         
         document.getElementById('payrollTotal').innerText = fmt(payroll);
         document.getElementById('capacityLimit').innerText = '$' + fmt(capacity);
-        document.getElementById('availableMedia').innerText = '$' + fmt(Math.max(0, availableMediaBudget));
         document.getElementById('allocatedTotal').innerText = '$' + fmt(mediaSpend);
         
         let elAllocated = document.getElementById('allocatedTotal');
         let btnRun = document.getElementById('runBtn');
         let isValid = true;
         
-        if (availableMediaBudget < 0) { elAllocated.style.color = "var(--danger)"; btnRun.innerText = "Payroll Exceeds Budget"; isValid = false; }
-        else if (mediaSpend > availableMediaBudget) { elAllocated.style.color = "var(--danger)"; btnRun.innerText = "Over Budget"; isValid = false; }
+        if (mediaSpend > state.clientBudget) { elAllocated.style.color = "var(--danger)"; btnRun.innerText = "Over Client Budget"; isValid = false; }
         else if (mediaSpend > capacity) { elAllocated.style.color = "var(--warning)"; btnRun.innerText = "Exceeds Capacity"; isValid = false; }
         else if (mediaSpend === 0) { elAllocated.style.color = "var(--text)"; btnRun.innerText = "Enter Spend Allocation"; isValid = false; }
         else { elAllocated.style.color = "var(--success)"; btnRun.innerText = `Execute Campaign`; }
 
-        if (state.patience <= 0 || state.funds < 0) isValid = false;
+        if (state.patience <= 0 || state.balance < 0) isValid = false;
         btnRun.disabled = !isValid;
     }
 
@@ -333,9 +329,16 @@
 
         if(s.tv > 0 && s.tv < 20000) return alert("Linear TV requires a $20k minimum spend.");
 
+        // Agency pays payroll from its own balance
         let payroll = (state.hr.jr * 3000) + (state.hr.sr * 8000);
-        state.funds -= payroll;
-        if (state.funds < 0) { document.getElementById('agencyFunds').innerText = state.funds.toFixed(0); log("BANKRUPT. GAME OVER.", "text-danger"); document.getElementById('runBtn').disabled = true; return; }
+        state.balance -= payroll;
+        
+        if (state.balance < 0) { 
+            document.getElementById('agencyBalance').innerText = fmt(Math.round(state.balance)); 
+            log(`BANKRUPT. Payroll of $${fmt(payroll)} pushed you into the red. GAME OVER.`, "text-danger"); 
+            document.getElementById('runBtn').disabled = true; 
+            return; 
+        }
 
         state.halo = Math.max(1.0, state.halo - 0.05);
         if(s.tv >= 20000) state.halo += 0.25;
@@ -363,11 +366,19 @@
         let roas = (totalRev / mediaSpend).toFixed(2);
         let msg = `Spent $${fmt(mediaSpend)}. Rev: $${fmt(totalRev.toFixed(0))} (${roas}x). `;
         
+        let fee = 0;
         if(roas >= briefRules.target) {
-            let fee = mediaSpend * 0.15; state.funds += fee; msg += `Hit target! Earned $${fmt(fee.toFixed(0))}.`;
-            log(msg, "text-success"); if(roas > briefRules.target + 0.5 && state.patience < 5) state.patience++;
+            fee = mediaSpend * 0.15; 
+            state.balance += fee; 
+            msg += `Target Hit! Earned $${fmt(Math.round(fee))} (15%).`;
+            log(msg, "text-success"); 
+            if(roas > briefRules.target + 0.5 && state.patience < 5) state.patience++;
         } else {
-            state.patience--; msg += `Missed target of ${briefRules.target}x.`; log(msg, "text-warning");
+            fee = mediaSpend * 0.05;
+            state.balance += fee;
+            state.patience--; 
+            msg += `Missed target of ${briefRules.target}x. Earned $${fmt(Math.round(fee))} (5% base).`; 
+            log(msg, "text-warning");
         }
 
         // Output the Educational Feedback
@@ -379,7 +390,7 @@
         }
 
         state.month++;
-        document.getElementById('agencyFunds').innerText = fmt(state.funds.toFixed(0));
+        document.getElementById('agencyBalance').innerText = fmt(Math.round(state.balance));
         document.getElementById('monthDisplay').innerText = state.month;
         document.getElementById('haloDisplay').innerText = state.halo.toFixed(2);
         document.getElementById('seoDisplay').innerText = state.seo.toFixed(0);
