@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Media Agency Sim: HR Edition</title>
+    <title>Media Agency Sim: HR & Retainer Edition</title>
     <style>
         :root { --bg: #f0f2f5; --text: #333; --panel: #fff; --primary: #2980b9; --success: #27ae60; --danger: #e74c3c; --warning: #f39c12; --border: #e1e4e8; }
         body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding: 20px; line-height: 1.5; }
@@ -66,8 +66,11 @@
         </div>
         <div class="stat-block">
             <div style="font-size: 1.3em;">Agency Bank: <strong style="color: #4af626;">$<span id="agencyFunds">25000</span></strong></div>
-            <div>Client Patience: <span id="patienceDisplay">⭐⭐⭐</span></div>
-            <div style="font-size: 0.8em; color: #95a5a6;">Brand Halo: <span id="haloDisplay">1.00</span>x | SEO Momentum: <span id="seoDisplay">0</span></div>
+            <div style="font-size: 1.1em; margin-top: 5px;">
+                Client Patience: <span id="patienceDisplay">⭐⭐⭐</span> 
+                <span id="moodDisplay" style="font-size: 1.5em; vertical-align: middle; margin-left: 5px;">😀</span>
+            </div>
+            <div style="font-size: 0.8em; color: #95a5a6; margin-top: 5px;">Brand Halo: <span id="haloDisplay">1.00</span>x | SEO Momentum: <span id="seoDisplay">0</span></div>
         </div>
     </div>
 
@@ -100,8 +103,8 @@
                     </div>
                 </div>
             </div>
-            <div style="background: #f1f2f6; padding: 10px; border-radius: 4px; text-align: center; font-size: 0.9em;">
-                Monthly Payroll: <strong style="color: var(--danger);">-$<span id="payrollTotal">3000</span></strong>
+            <div style="background: #fdf2e9; padding: 10px; border-radius: 4px; text-align: center; font-size: 0.9em; border: 1px solid var(--warning);">
+                Payroll (Deducted from Client Budget): <strong style="color: var(--danger);">-$<span id="payrollTotal">3000</span></strong>
             </div>
         </div>
 
@@ -119,22 +122,22 @@
         </div>
 
         <div class="log-area" id="logArea">
-            <div class="log-entry">Agency initialized. $100k client budget secured. Ensure you have the capacity to spend the budget!</div>
+            <div class="log-entry">Agency initialized. $100k client budget secured. Note: Payroll is pulled directly from the client's budget!</div>
         </div>
     </div>
 
     <div class="panel">
         <div class="allocation-header">
             <div class="tracker">
-                <span style="font-size: 0.9em; text-transform: uppercase; color: #7f8c8d;">Allocated</span>
+                <span style="font-size: 0.9em; text-transform: uppercase; color: #7f8c8d;">Allocated Media</span>
                 <span class="tracker-value" id="allocatedTotal" style="color: var(--primary);">$0</span>
             </div>
-            <div class="tracker">
-                <span style="font-size: 0.9em; text-transform: uppercase; color: #7f8c8d;">Client Budget</span>
-                <span class="tracker-value" id="budgetLimit">$100,000</span>
+            <div class="tracker" style="border-left: 1px solid #ddd; border-right: 1px solid #ddd; padding: 0 15px;">
+                <span style="font-size: 0.9em; text-transform: uppercase; color: #7f8c8d;">Media Budget (After Payroll)</span>
+                <span class="tracker-value" id="availableMedia">$97,000</span>
             </div>
             <div class="tracker">
-                <span style="font-size: 0.9em; text-transform: uppercase; color: #7f8c8d;">Staff Capacity</span>
+                <span style="font-size: 0.9em; text-transform: uppercase; color: #7f8c8d;">Staffing Capacity</span>
                 <span class="tracker-value" id="capacityLimit">$30,000</span>
             </div>
         </div>
@@ -184,7 +187,6 @@
         { name: 'Holiday Rush', desc: "All conversions up, but costs are higher." }
     ];
 
-    // Format currency helper
     const fmt = num => num.toLocaleString();
 
     function updateHR(type, change) {
@@ -193,6 +195,15 @@
             document.getElementById(type + 'Count').innerText = state.hr[type];
             validateForm();
         }
+    }
+
+    function updateMood() {
+        let moodStr = "😀";
+        if (state.patience >= 3) moodStr = "😀";
+        else if (state.patience === 2) moodStr = "😐";
+        else if (state.patience === 1) moodStr = "😨";
+        else moodStr = "💀";
+        document.getElementById('moodDisplay').innerText = moodStr;
     }
 
     function setupNextMonth() {
@@ -215,43 +226,49 @@
             document.getElementById('eventDesc').innerText = events[0].desc;
             document.getElementById('eventCard').style.borderColor = "var(--success)";
         }
+        
+        updateMood();
     }
 
     function validateForm() {
-        // Calculate Capacities
-        let capacity = (state.hr.jr * 30000) + (state.hr.sr * 80000);
         let payroll = (state.hr.jr * 3000) + (state.hr.sr * 8000);
+        let capacity = (state.hr.jr * 30000) + (state.hr.sr * 80000);
         
-        // Calculate Spend
-        let totalSpend = 0;
-        channels.forEach(ch => totalSpend += parseInt(document.getElementById('ch_' + ch).value) || 0);
+        // Client pays for payroll out of their $100k budget. What's left is for Media.
+        let availableMediaBudget = state.clientBudget - payroll;
         
-        // Update UI
-        document.getElementById('capacityLimit').innerText = '$' + fmt(capacity);
+        let mediaSpend = 0;
+        channels.forEach(ch => mediaSpend += parseInt(document.getElementById('ch_' + ch).value) || 0);
+        
         document.getElementById('payrollTotal').innerText = fmt(payroll);
-        document.getElementById('allocatedTotal').innerText = '$' + fmt(totalSpend);
+        document.getElementById('capacityLimit').innerText = '$' + fmt(capacity);
+        document.getElementById('availableMedia').innerText = '$' + fmt(Math.max(0, availableMediaBudget));
+        document.getElementById('allocatedTotal').innerText = '$' + fmt(mediaSpend);
         
         let elAllocated = document.getElementById('allocatedTotal');
         let btnRun = document.getElementById('runBtn');
 
-        // Validation Logic
         let isValid = true;
         
-        if (totalSpend > state.clientBudget) {
+        if (availableMediaBudget < 0) {
             elAllocated.style.color = "var(--danger)";
-            btnRun.innerText = "Over Client Budget!";
+            btnRun.innerText = "Payroll exceeds total Client Budget!";
             isValid = false;
-        } else if (totalSpend > capacity) {
+        } else if (mediaSpend > availableMediaBudget) {
+            elAllocated.style.color = "var(--danger)";
+            btnRun.innerText = "Over Available Media Budget!";
+            isValid = false;
+        } else if (mediaSpend > capacity) {
             elAllocated.style.color = "var(--warning)";
             btnRun.innerText = "Exceeds Staff Capacity!";
             isValid = false;
-        } else if (totalSpend === 0) {
+        } else if (mediaSpend === 0) {
             elAllocated.style.color = "var(--text)";
             btnRun.innerText = "Execute Campaign";
             isValid = false;
         } else {
             elAllocated.style.color = "var(--success)";
-            btnRun.innerText = `Run Month (${state.currentBrief} Brief)`;
+            btnRun.innerText = `Run Month (${state.currentBrief})`;
         }
 
         if (state.patience <= 0 || state.funds < 0) isValid = false;
@@ -265,10 +282,10 @@
 
     function runMonth() {
         let s = {}; 
-        let totalSpend = 0;
+        let mediaSpend = 0;
         channels.forEach(ch => {
             s[ch] = parseInt(document.getElementById('ch_' + ch).value) || 0;
-            totalSpend += s[ch];
+            mediaSpend += s[ch];
         });
 
         if(s.tv > 0 && s.tv < 20000) {
@@ -276,12 +293,12 @@
             return;
         }
 
-        // 1. Deduct Payroll FIRST
         let payroll = (state.hr.jr * 3000) + (state.hr.sr * 8000);
+        
+        // Agency pays salaries, but the agency earns the 15% commission off the MEDIA spend.
         state.funds -= payroll;
         log(`Paid salaries: -$${fmt(payroll)}.`, "text-warning");
 
-        // 2. Game Over Check (Bankrupt)
         if (state.funds < 0) {
             document.getElementById('agencyFunds').innerText = state.funds.toFixed(0);
             log("AGENCY BANKRUPT. You cannot afford payroll. GAME OVER.", "text-danger");
@@ -289,12 +306,10 @@
             return;
         }
 
-        // 3. Process Math
         state.halo = Math.max(1.0, state.halo - 0.05);
         if(s.tv >= 20000) state.halo += 0.25;
         state.seo += (s.seo * 0.3);
 
-        // Senior Buyers give a slight buff to volatile channels
         let srBuff = 1.0 + (state.hr.sr * 0.05); 
 
         let returns = {
@@ -321,14 +336,16 @@
 
         let totalRev = 0;
         for(let k in returns) totalRev += returns[k];
-        let roas = (totalRev / totalSpend).toFixed(2);
+        
+        // ROAS is calculated based on Media Spend alone, to be fair to the client's ad performance
+        let roas = (totalRev / mediaSpend).toFixed(2);
 
-        // 4. Resolve Commission
-        let msg = `Spent $${fmt(totalSpend)}. Rev: $${fmt(totalRev.toFixed(0))} (ROAS: ${roas}x). `;
+        let msg = `Spent $${fmt(mediaSpend)} on media. Rev: $${fmt(totalRev.toFixed(0))} (ROAS: ${roas}x). `;
+        
         if(roas >= briefRules.target) {
-            let fee = totalSpend * 0.15;
+            let fee = mediaSpend * 0.15;
             state.funds += fee;
-            msg += `Target hit! Earned $${fmt(fee.toFixed(0))} fee.`;
+            msg += `Target hit! Earned $${fmt(fee.toFixed(0))} commission.`;
             log(msg, "text-success");
             if(roas > briefRules.target + 0.5 && state.patience < 5) state.patience++;
         } else {
@@ -337,15 +354,14 @@
             log(msg, "text-danger");
         }
 
-        // 5. Game Over Check (Fired)
         if (state.patience <= 0) {
             document.getElementById('patienceDisplay').innerText = "NONE";
+            updateMood();
             log("CLIENT FIRED YOU due to poor performance. GAME OVER.", "text-danger");
             document.getElementById('runBtn').disabled = true;
             return;
         }
 
-        // 6. Next Turn Setup
         state.month++;
         document.getElementById('agencyFunds').innerText = fmt(state.funds.toFixed(0));
         document.getElementById('monthDisplay').innerText = state.month;
@@ -355,10 +371,9 @@
 
         setupNextMonth();
         channels.forEach(ch => document.getElementById('ch_'+ch).value = 0);
-        validateForm(); // Re-run validation to reset button states
+        validateForm(); 
     }
 
-    // Initialize Game
     setupNextMonth();
     validateForm();
 </script>
