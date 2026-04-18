@@ -204,7 +204,7 @@
         </div>
         
         <div class="log-area" id="logArea">
-            <div class="log-entry">System ready. Managing $500,000 for Month 1. Note: Client budget will fluctuate dynamically based on your performance. Adjust staff accordingly!</div>
+            <div class="log-entry">System ready. Managing $500,000 for Month 1.</div>
         </div>
     </div>
 </div>
@@ -213,47 +213,38 @@
     let state = { 
         month: 1, balance: 100000, clientBudget: 500000, patience: 3, halo: 1.0, seo: 0, 
         hr: { ceo: 1, dir: 0, jr: 1, sr: 3 }, 
-        lastBrief: '', currentBrief: 'Performance', currentEvent: 'Normal' 
+        briefHistory: [], currentBrief: 'Performance', currentEvent: 'Normal' 
     };
     const channels = ['ppc', 'social', 'seo', 'prog', 'affiliate', 'email', 'sms', 'mail', 'tv', 'billboard', 'cinema', 'podcast', 'influencer'];
     
+    // 26 Unique Scenarios
     const briefs = {
-        'Performance': { 
-            target: 2.5, special: false, 
-            desc: "Focus strictly on direct sales and immediate ROI. Brand building is secondary this month.", 
-            bonuses: ['ppc', 'mail', 'email', 'sms', 'affiliate'],
-            feedback: "Performance briefs demand high-intent channels (Paid Search) and direct-response formats (Email, SMS, Direct Mail, Affiliates)."
-        },
-        'Awareness': { 
-            target: 1.2, special: false, 
-            desc: "Maximize reach and brand visibility. The client wants everyone to see their logo.", 
-            bonuses: ['tv', 'billboard', 'cinema', 'podcast', 'prog'],
-            feedback: "Awareness requires cheap reach and large formats. TV, Billboards, Cinema, Podcasts, and Programmatic are ideal for top-of-funnel branding."
-        },
-        'Retention': { 
-            target: 1.8, special: false, 
-            desc: "Focus on increasing the lifetime value of existing customers and reducing client churn.", 
-            bonuses: ['social', 'email', 'influencer', 'sms'],
-            feedback: "Retention relies on channels where you control the audience list (Email, SMS) or community-driven platforms (Social, Influencers)."
-        },
-        'CEO Vanity Project': { 
-            target: 0.8, special: true, 
-            desc: "The CEO just wants to see their own face online. Performance metrics do not matter this month.", 
-            bonuses: ['social', 'prog', 'podcast'],
-            feedback: "To ensure a specific person sees an ad, you need granular targeting. Programmatic (IP targeting) and Paid Social are perfect for vanity placements."
-        },
-        'B2B Event Blitz': { 
-            target: 1.5, special: true, 
-            desc: "A major industry trade show is happening this month. We need to dominate the physical event.", 
-            bonuses: ['billboard', 'mail', 'email'],
-            feedback: "Event marketing requires localized presence. Billboards near the venue, Direct Mail to partner hotels, and Email sequences are key."
-        },
-        'PR Damage Control': { 
-            target: 0.5, special: true, 
-            desc: "An executive made a massive public blunder. We need to control the narrative immediately.", 
-            bonuses: ['ppc', 'tv', 'social'],
-            feedback: "During a crisis, you must own the narrative. Paid Search controls brand keywords, TV allows for apology broadcasts, and Social manages community sentiment."
-        }
+        'Performance': { target: 2.5, special: false, desc: "Focus strictly on direct sales and immediate ROI. Brand building is secondary.", bonuses: ['ppc', 'mail', 'email', 'sms', 'affiliate'], feedback: "Performance briefs demand high-intent channels (Paid Search) and direct-response formats (Email, SMS, Direct Mail)." },
+        'Awareness': { target: 1.2, special: false, desc: "Maximize reach and brand visibility. The client wants everyone to see their logo.", bonuses: ['tv', 'billboard', 'cinema', 'podcast', 'prog'], feedback: "Awareness requires cheap reach and large formats like TV, Billboards, and Cinema." },
+        'Retention': { target: 1.8, special: false, desc: "Focus on increasing the lifetime value of existing customers and reducing churn.", bonuses: ['social', 'email', 'influencer', 'sms'], feedback: "Retention relies on channels where you control the list (Email, SMS) or community platforms." },
+        'CEO Vanity Project': { target: 0.8, special: true, desc: "The CEO just wants to see their own face online. Performance metrics do not matter.", bonuses: ['social', 'prog', 'podcast'], feedback: "To ensure a specific person sees an ad, you need granular IP targeting (Programmatic) and Paid Social." },
+        'B2B Event Blitz': { target: 1.5, special: true, desc: "Major industry trade show this month. Dominate the physical event and surrounding area.", bonuses: ['billboard', 'mail', 'email'], feedback: "Event marketing requires localized presence: Billboards near the venue, and Direct Mail to partner hotels." },
+        'PR Damage Control': { target: 0.5, special: true, desc: "An executive made a massive public blunder. Control the narrative immediately.", bonuses: ['ppc', 'tv', 'social'], feedback: "During a crisis, you must own the narrative via Paid Search, apology broadcasts (TV), and Social." },
+        'App Launch (Installs)': { target: 2.0, special: true, desc: "We are launching a new mobile app. Drive as many downloads as possible.", bonuses: ['social', 'affiliate', 'influencer'], feedback: "App installs thrive on social proof, influencer endorsements, and performance-based affiliate networks." },
+        'Rebranding Campaign': { target: 0.8, special: true, desc: "The company has a new logo and mission. Tell the world, don't worry about sales.", bonuses: ['tv', 'billboard', 'cinema', 'podcast'], feedback: "Rebranding needs mass reach and emotional storytelling, prioritizing traditional and audio-visual media." },
+        'Black Friday Blowout': { target: 3.5, special: true, desc: "It is the biggest shopping day of the year. Empty the warehouse!", bonuses: ['ppc', 'email', 'sms'], feedback: "High-intent periods require capturing existing demand (PPC) and leveraging owned audience lists (Email/SMS)." },
+        'Local Store Grand Opening': { target: 1.5, special: true, desc: "A new flagship physical store is opening. Drive foot traffic to the location.", bonuses: ['billboard', 'mail', 'cinema', 'social'], feedback: "Foot traffic requires hyper-local awareness like Billboards, localized Social, and Direct Mail." },
+        'Gen Z Product Drop': { target: 2.2, special: true, desc: "A limited-edition streetwear collab just dropped. Hype is everything.", bonuses: ['influencer', 'social', 'sms'], feedback: "Gen Z responds to authentic creator content (Influencers), social algorithms, and immediate SMS drops." },
+        'High-Ticket B2B Lead Gen': { target: 3.0, special: true, desc: "We need enterprise leads for a $100k software product.", bonuses: ['ppc', 'mail', 'podcast'], feedback: "Enterprise sales need search intent (PPC), direct executive outreach (Mail), and niche thought leadership (Podcasts)." },
+        'Political Campaign Sprint': { target: 1.0, special: true, desc: "Election day is weeks away. Blitz the voters and raise funds.", bonuses: ['tv', 'prog', 'sms', 'mail'], feedback: "Political campaigns blitz voters with TV spots, programmatic display, and constant SMS/Mail fundraising." },
+        'E-commerce Cart Abandonment': { target: 3.0, special: true, desc: "Thousands of users left items in their carts. Bring them back to checkout.", bonuses: ['email', 'prog', 'sms'], feedback: "Winning back lost carts relies on retargeting via Programmatic and direct nudges via Email/SMS." },
+        'Medicare Plan Enrollment': { target: 1.5, special: true, desc: "Targeting seniors aged 65+ to switch their healthcare plans.", bonuses: ['tv', 'mail', 'ppc'], feedback: "Older demographics index highly on Linear TV, physical Direct Mail, and direct Search." },
+        'Viral TikTok Challenge': { target: 1.2, special: true, desc: "We want to start a branded dance trend on short-form video platforms.", bonuses: ['influencer', 'social'], feedback: "Seeding a viral trend requires paying heavy-hitting Influencers and boosting their posts via Paid Social." },
+        'Niche Hobbyist Product': { target: 2.5, special: true, desc: "Selling $500 custom mechanical keyboards to enthusiasts.", bonuses: ['affiliate', 'podcast', 'seo'], feedback: "Niche communities are best reached through trusted podcast hosts, community affiliates, and long-tail SEO." },
+        'End of Q4 Budget Burn': { target: 0.8, special: true, desc: "The client has $500k left they MUST spend or lose next year. Spend it fast.", bonuses: ['prog', 'tv', 'billboard'], feedback: "When clients just need to spend budget quickly, buy high-volume, broad-reach inventory like TV and Programmatic." },
+        'Competitor Attack Ads': { target: 1.5, special: true, desc: "A rival launched a campaign against us. Fire back and steal their traffic.", bonuses: ['ppc', 'social', 'podcast'], feedback: "Defend your brand terms on PPC, address the community on Social, and sponsor Podcasts to shift the narrative." },
+        'Luxury Brand Exclusivity': { target: 1.0, special: true, desc: "Promoting a $10,000 watch. Avoid cheap placements; maintain prestige.", bonuses: ['cinema', 'mail', 'podcast'], feedback: "Luxury avoids cheap inventory, preferring high-production Cinema, premium catalogs, and high-end Podcasts." },
+        'Flash Sale (24 Hours)': { target: 3.5, special: true, desc: "Everything is 50% off, but only for today. We need instant eyeballs.", bonuses: ['sms', 'email', 'social'], feedback: "Flash sales need instant delivery. SMS and Email bypass algorithms to guarantee immediate eyeballs." },
+        'New Movie Premiere': { target: 1.2, special: true, desc: "A blockbuster movie opens this weekend. Pack the theaters.", bonuses: ['tv', 'cinema', 'billboard', 'social'], feedback: "Entertainment relies on visual spectacle and mass awareness right before opening weekend." },
+        'Seed Funding Announcement': { target: 0.5, special: true, desc: "A startup raised $5M. They want to attract talent and future VCs.", bonuses: ['podcast', 'prog'], feedback: "Announcing funding is about reaching specific professionals, prioritizing niche Podcasts and B2B Programmatic." },
+        'Subscription Box Churn': { target: 2.0, special: true, desc: "Subscribers are canceling after month 3. Keep them engaged.", bonuses: ['email', 'sms', 'mail'], feedback: "Keeping subscribers requires personalized communication via Email, SMS, and tangible Direct Mail gifts." },
+        'Long-Term Content Play': { target: 1.5, special: true, desc: "Building a library of 'How-To' content for future organic traffic.", bonuses: ['seo', 'podcast', 'affiliate'], feedback: "Evergreen content builds over time. Invest in SEO, educational Podcasts, and content-driven Affiliates." },
+        'Influencer Apology Tour': { target: 0.8, special: true, desc: "Our brand ambassador messed up. Help them rebuild their image.", bonuses: ['podcast', 'social'], feedback: "Rebuilding trust requires long-form, unedited conversations (Podcasts) and direct community management (Social)." }
     };
     
     const events = [
@@ -283,9 +274,15 @@
 
     function setupNextMonth() {
         const briefKeys = Object.keys(briefs);
-        let availableBriefs = briefKeys.filter(k => k !== state.lastBrief);
+        
+        // 6-Month Memory Logic ensures scenarios don't repeat too soon
+        let availableBriefs = briefKeys.filter(k => !state.briefHistory.includes(k));
+        if (availableBriefs.length === 0) availableBriefs = briefKeys; // Fallback just in case
+        
         state.currentBrief = availableBriefs[Math.floor(Math.random() * availableBriefs.length)];
-        state.lastBrief = state.currentBrief; 
+        
+        state.briefHistory.push(state.currentBrief);
+        if (state.briefHistory.length > 6) state.briefHistory.shift(); 
         
         let b = briefs[state.currentBrief];
         
@@ -315,12 +312,12 @@
             document.getElementById('eventCard').style.borderColor = "var(--warning)"; 
         }
         updateMood();
-        validateForm(); // Refresh capacities UI
+        validateForm(); 
     }
 
     function validateForm() {
         let payroll = (state.hr.ceo * 15000) + (state.hr.dir * 12000) + (state.hr.jr * 3000) + (state.hr.sr * 8000);
-        let capacity = (state.hr.jr * 50000) + (state.hr.sr * 150000); // Updated capacities
+        let capacity = (state.hr.jr * 50000) + (state.hr.sr * 150000); 
         
         let totalBuyers = state.hr.jr + state.hr.sr;
         let requiredDirs = Math.max(0, Math.ceil(totalBuyers / 5) - 1);
@@ -380,7 +377,6 @@
         state.seo += (s.seo * 0.3);
 
         let srBuff = 1.0 + (state.hr.sr * 0.05); 
-        // Increased fatigue thresholds for scale
         let returns = {
             ppc: s.ppc * (1.2 + Math.random()) * state.halo, social: s.social * (0.5 + Math.random() * 2) * srBuff,
             seo: state.seo * (1.0 + Math.random()), prog: s.prog * (0.8 + Math.random() * 0.5) * state.halo,
@@ -403,13 +399,12 @@
         let msg = `Spent $${fmt(mediaSpend)}. Rev: $${fmt(totalRev.toFixed(0))} (${roas}x). `;
         
         let fee = 0;
-        let budgetChangePct = Math.random() * 0.25; // Random change up to 25%
+        let budgetChangePct = Math.random() * 0.25; 
 
         if(roas >= briefRules.target) {
             fee = mediaSpend * 0.15; 
             state.balance += fee; 
             
-            // Increase Budget
             let increase = state.clientBudget * budgetChangePct;
             state.clientBudget += increase;
 
@@ -421,7 +416,6 @@
             state.balance += fee;
             state.patience--; 
             
-            // Decrease Budget
             let decrease = state.clientBudget * budgetChangePct;
             state.clientBudget -= decrease;
 
@@ -429,7 +423,6 @@
             log(msg, "text-warning");
         }
 
-        // Output Educational Feedback
         log(`💡 <strong>Agency Insight:</strong> ${briefRules.feedback}`, "text-info");
 
         if (state.patience <= 0) {
@@ -444,7 +437,6 @@
         document.getElementById('seoDisplay').innerText = state.seo.toFixed(0);
         document.getElementById('patienceDisplay').innerText = "⭐".repeat(Math.max(0, state.patience));
 
-        // Visual flash to draw attention to the new budget requirement
         flashBudgetTracker();
 
         setupNextMonth();
