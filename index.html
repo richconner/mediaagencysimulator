@@ -11,7 +11,9 @@
         
         /* Header */
         .header { grid-column: 1 / -1; display: flex; justify-content: space-between; align-items: center; background: #0f172a; color: white; padding: 12px 20px; border-radius: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-        .header h1 { margin: 0; font-size: 1.5em; letter-spacing: -0.5px; }
+        .header h1 { margin: 0; font-size: 1.5em; letter-spacing: -0.5px; display: flex; align-items: center; gap: 10px; }
+        .version-badge { font-size: 0.5em; background: rgba(255,255,255,0.1); padding: 4px 8px; border-radius: 12px; font-weight: normal; letter-spacing: 0.5px; color: #cbd5e1; }
+        
         .stat-block { display: flex; gap: 20px; align-items: center; text-align: right; }
         .stat-item { display: flex; flex-direction: column; justify-content: center; }
         .stat-label { font-size: 0.75em; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; }
@@ -31,7 +33,11 @@
         .role-controls button { width: 24px; height: 24px; border-radius: 4px; border: 1px solid #cbd5e1; background: white; cursor: pointer; color: var(--text); font-weight: bold; }
         .role-controls button:hover { background: #e2e8f0; }
         .role-controls span { font-weight: bold; font-size: 1.1em; width: 16px; }
-        .payroll-alert { background: #fffbeb; color: #b45309; padding: 8px; border-radius: 4px; text-align: center; font-size: 0.9em; border: 1px solid #fde68a; margin-top: 5px; }
+        
+        .payroll-alert { background: #f1f5f9; color: #334155; padding: 8px; border-radius: 4px; text-align: center; font-size: 0.95em; border: 1px solid #e2e8f0; margin-top: 5px; font-weight: 500;}
+        .hr-rules { font-size: 0.85em; text-align: center; margin-top: 8px; padding: 8px; border-radius: 4px; transition: all 0.3s ease; }
+        .hr-rules.warning { background: #fffbeb; color: #b45309; border: 1px dashed #fcd34d; }
+        .hr-rules.waived { background: #ecfdf5; color: #065f46; border: 1px solid #6ee7b7; }
         
         /* Brief & Market */
         .card { padding: 12px; border-radius: 4px; margin-bottom: 10px; border-left: 3px solid; }
@@ -74,8 +80,6 @@
         .text-warning { color: #fbbf24; }
         .text-info { color: var(--info); font-weight: normal; font-style: italic; background: rgba(14, 165, 233, 0.1); padding: 6px; border-radius: 3px; display: inline-block; width: 100%; box-sizing: border-box; }
         .text-special { color: #a78bfa; font-weight: bold; }
-        
-        .version-tag { text-align: center; font-size: 0.8em; color: var(--hint); margin-top: auto; padding-top: 15px; }
     </style>
 </head>
 <body>
@@ -83,7 +87,7 @@
 <div class="container">
     <div class="header">
         <div>
-            <h1>Media Agency Simulator</h1>
+            <h1>Media Agency Simulator <span class="version-badge">v1.5.0</span></h1>
             <div style="font-size: 0.85em; color: #94a3b8; margin-top: 2px;">Month <span id="monthDisplay" style="color: white; font-weight: bold; font-size: 1.2em;">1</span></div>
         </div>
         <div class="stat-block">
@@ -161,6 +165,9 @@
             <div class="payroll-alert">
                 Monthly Overhead: <strong>-$<span id="payrollTotal">48,000</span></strong>
             </div>
+            <div class="hr-rules warning" id="hrRulesBox">
+                ⚠️ <strong>Without HR Mgr:</strong> Hiring costs $5k. Firing costs 2x Salary.
+            </div>
         </div>
 
         <div class="panel">
@@ -174,10 +181,6 @@
                 <span class="card-title">Event: <span id="eventTitle">Normal Market</span></span>
                 <div class="card-desc" id="eventDesc">Conditions stable.</div>
             </div>
-        </div>
-        
-        <div class="version-tag">
-            Media Agency Simulator v1.4.0
         </div>
     </div>
 
@@ -261,7 +264,7 @@
         </div>
         
         <div class="log-area" id="logArea">
-            <div class="log-entry">System v1.4.0 initialized. Watch out for Recruiting and Severance fees unless you hire an HR Manager!</div>
+            <div class="log-entry">System v1.5.0 initialized. Watch out for Recruiting and Severance fees unless you hire an HR Manager!</div>
         </div>
     </div>
 </div>
@@ -331,7 +334,6 @@
             let msg = "";
             
             // Apply Recruiting/Severance fees if the agency doesn't have an HR Manager.
-            // (Note: Hiring the *first* HR Manager still costs a recruiting fee!)
             if (state.hr.hrm === 0) {
                 if (change > 0) {
                     fee = 5000;
@@ -423,6 +425,17 @@
         document.getElementById('clientBudgetTracker').innerText = '$' + fmt(Math.round(state.clientBudget));
         document.getElementById('allocatedTotal').innerText = '$' + fmt(mediaSpend);
         
+        let rulesBox = document.getElementById('hrRulesBox');
+        if (state.hr.hrm > 0) {
+            rulesBox.classList.add('waived');
+            rulesBox.classList.remove('warning');
+            rulesBox.innerHTML = `✅ <strong>HR Mgr Active:</strong> Hiring and Firing fees waived.`;
+        } else {
+            rulesBox.classList.add('warning');
+            rulesBox.classList.remove('waived');
+            rulesBox.innerHTML = `⚠️ <strong>Without HR Mgr:</strong> Hiring costs $5k. Firing costs 2x Salary.`;
+        }
+
         let elAllocated = document.getElementById('allocatedTotal');
         let btnRun = document.getElementById('runBtn');
         let isValid = true;
