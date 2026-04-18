@@ -3,28 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Omnichannel Agency Sim</title>
+    <title>Omnichannel Agency Simulator</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f6; color: #333; margin: 0; padding: 20px; }
-        .container { max-width: 900px; margin: 0 auto; }
-        .header { display: flex; justify-content: space-between; background: #2c3e50; color: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; }
-        .dashboard { display: grid; grid-template-columns: 1fr 2fr; gap: 20px; }
-        .panel { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        h1, h2 { margin-top: 0; }
-        .metric { font-size: 1.1em; margin-bottom: 10px; }
-        .metric span { font-weight: bold; color: #2980b9; }
-        .channels-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
-        .input-group label { display: block; margin-bottom: 5px; font-weight: bold; font-size: 0.9em; }
-        .input-group input { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
-        .hint { font-size: 0.8em; color: #7f8c8d; display: block; margin-top: 2px; }
-        button { background: #27ae60; color: white; border: none; padding: 15px 20px; font-size: 1.1em; border-radius: 4px; cursor: pointer; width: 100%; font-weight: bold; }
+        :root { --bg: #f4f7f6; --text: #333; --panel: #fff; --primary: #2980b9; --success: #27ae60; --danger: #c0392b; --warning: #f39c12; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding: 20px; line-height: 1.6; }
+        .container { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1fr 2fr; gap: 20px; }
+        .header { grid-column: 1 / -1; display: flex; justify-content: space-between; align-items: center; background: #2c3e50; color: white; padding: 20px; border-radius: 8px; }
+        .header h1 { margin: 0; font-size: 1.8em; }
+        .panel { background: var(--panel); padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .sidebar { display: flex; flex-direction: column; gap: 20px; }
+        h2 { margin-top: 0; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+        .metric { font-size: 1.1em; margin-bottom: 8px; }
+        .metric span { font-weight: bold; color: var(--primary); }
+        .brief-card { background: #e8f4f8; border-left: 4px solid var(--primary); padding: 15px; border-radius: 4px; margin-bottom: 15px; }
+        .event-card { background: #fdf2e9; border-left: 4px solid var(--warning); padding: 15px; border-radius: 4px; }
+        
+        .channels-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .input-group { background: #f9f9f9; padding: 10px; border-radius: 6px; border: 1px solid #eee; }
+        .input-group label { display: block; font-weight: bold; font-size: 0.9em; margin-bottom: 5px; }
+        .input-group input { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-size: 1em; }
+        .hint { font-size: 0.75em; color: #7f8c8d; display: block; margin-top: 4px; }
+        
+        .sticky-footer { position: sticky; bottom: 0; background: white; padding: 15px 0; border-top: 1px solid #eee; margin-top: 20px; }
+        button { background: var(--success); color: white; border: none; padding: 15px; font-size: 1.2em; border-radius: 6px; cursor: pointer; width: 100%; font-weight: bold; transition: background 0.2s; }
         button:hover { background: #2ecc71; }
         button:disabled { background: #95a5a6; cursor: not-allowed; }
-        .log-area { margin-top: 20px; background: white; padding: 20px; border-radius: 8px; max-height: 250px; overflow-y: auto; font-family: monospace; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        .log-entry { margin-bottom: 8px; border-bottom: 1px solid #eee; padding-bottom: 8px; }
-        .success { color: #27ae60; }
-        .warning { color: #e67e22; }
-        .danger { color: #c0392b; }
+        
+        .log-area { max-height: 400px; overflow-y: auto; font-family: monospace; background: #1e1e1e; color: #d4d4d4; padding: 15px; border-radius: 8px; font-size: 0.9em; }
+        .log-entry { margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px solid #333; }
+        .log-entry.success { color: #4af626; }
+        .log-entry.warning { color: #f1c40f; }
+        .log-entry.danger { color: #ff5252; }
     </style>
 </head>
 <body>
@@ -32,216 +41,214 @@
 <div class="container">
     <div class="header">
         <div>
-            <h1>AdVantage Agency</h1>
+            <h1>Global Media Group Sim</h1>
             <div>Month: <span id="monthDisplay">1</span></div>
         </div>
         <div style="text-align: right;">
-            <div>Agency Bank: <strong style="font-size: 1.5em; color: #2ecc71;">$<span id="agencyFunds">5000</span></strong></div>
-            <div style="font-size: 0.9em; margin-top: 5px;">Brand Halo (TV Multiplier): <span id="haloDisplay">1.00</span>x</div>
+            <div style="font-size: 1.2em;">Agency Bank: <strong style="color: #4af626;">$<span id="agencyFunds">10000</span></strong></div>
+            <div style="font-size: 0.9em; color: #bdc3c7;">Brand Halo: <span id="haloDisplay">1.00</span>x | SEO Momentum: <span id="seoDisplay">0</span></div>
         </div>
     </div>
 
-    <div class="dashboard">
+    <div class="sidebar">
         <div class="panel">
-            <h2>Current Client</h2>
-            <div class="metric">Name: <span>MegaCorp Retail</span></div>
-            <div class="metric">Monthly Budget: <span>$50,000</span></div>
-            <div class="metric">Target ROAS: <span>2.0x</span></div>
-            <div class="metric">Client Patience: <span id="patienceDisplay">⭐⭐⭐</span></div>
-            <hr>
-            <p><small><strong>Strategy Notes:</strong> TV requires $10k min spend but boosts digital channels. Email is highly profitable but caps out quickly. Print is safe but low yield.</small></p>
-        </div>
-
-        <div class="panel">
-            <h2>Allocate Budget</h2>
-            <div class="metric" style="text-align: right; font-size: 1.3em;">Remaining: <span>$<span id="remainingBudget">50000</span></span></div>
+            <h2>Current Client Status</h2>
+            <div class="metric">Client: <span>OmniCorp Global</span></div>
+            <div class="metric">Monthly Budget: <span>$100,000</span></div>
+            <div class="metric">Patience: <span id="patienceDisplay">⭐⭐⭐</span></div>
             
-            <div class="channels-grid">
-                <div class="input-group">
-                    <label>Paid Search (PPC)</label>
-                    <input type="number" id="ppc" value="0" min="0" oninput="updateRemaining()">
-                    <span class="hint">Predictable, high intent.</span>
-                </div>
-                <div class="input-group">
-                    <label>Paid Social</label>
-                    <input type="number" id="social" value="0" min="0" oninput="updateRemaining()">
-                    <span class="hint">High variance, viral potential.</span>
-                </div>
-                <div class="input-group">
-                    <label>SEO Investment</label>
-                    <input type="number" id="seo" value="0" min="0" oninput="updateRemaining()">
-                    <span class="hint">Builds momentum over time.</span>
-                </div>
-                <div class="input-group">
-                    <label>Programmatic Display</label>
-                    <input type="number" id="programmatic" value="0" min="0" oninput="updateRemaining()">
-                    <span class="hint">Steady, low margin reach.</span>
-                </div>
-                <div class="input-group">
-                    <label>Email Blasts</label>
-                    <input type="number" id="email" value="0" min="0" oninput="updateRemaining()">
-                    <span class="hint">High ROAS, fatigues over $2k.</span>
-                </div>
-
-                <div class="input-group">
-                    <label>Linear Television</label>
-                    <input type="number" id="tv" value="0" min="0" oninput="updateRemaining()">
-                    <span class="hint">$10k min. Builds Brand Halo.</span>
-                </div>
-                <div class="input-group">
-                    <label>Newspapers</label>
-                    <input type="number" id="print" value="0" min="0" oninput="updateRemaining()">
-                    <span class="hint">Low return, very low variance.</span>
-                </div>
-                <div class="input-group">
-                    <label>Billboards</label>
-                    <input type="number" id="billboard" value="0" min="0" oninput="updateRemaining()">
-                    <span class="hint">Fixed return, zero variance.</span>
-                </div>
+            <div class="brief-card" id="briefCard">
+                <strong style="display:block; margin-bottom:5px;">This Month's Brief: <span id="briefTitle">Performance</span></strong>
+                <span id="briefDesc">Focus on direct sales. Favor PPC, Direct Mail, Email, and SMS.</span><br>
+                <strong>Target ROAS: <span id="targetRoas">2.5</span>x</strong>
             </div>
 
-            <button id="runBtn" onclick="runMonth()">Execute Month Campaigns</button>
+            <div class="event-card" id="eventCard">
+                <strong style="display:block; margin-bottom:5px;">Market Event: <span id="eventTitle">Normal Market</span></strong>
+                <span id="eventDesc">Conditions are stable. Proceed with standard strategy.</span>
+            </div>
+        </div>
+
+        <div class="log-area" id="logArea">
+            <div style="color: #fff; margin-bottom: 10px; border-bottom: 1px solid #555; padding-bottom: 5px;">--- CAMPAIGN LOG ---</div>
+            <div class="log-entry">System initialized. Waiting for Month 1 deployment.</div>
         </div>
     </div>
 
-    <div class="log-area" id="logArea">
-        <strong>Campaign Log:</strong><br>
-        <div class="log-entry">MegaCorp onboarded. $50,000 budget ready for deployment.</div>
+    <div class="panel">
+        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #eee; padding-bottom: 10px; margin-bottom: 15px;">
+            <h2 style="border: none; padding: 0; margin: 0;">Allocate Budget</h2>
+            <div class="metric" style="margin: 0; font-size: 1.3em;">Remaining: <span id="remainingBudget" style="color: var(--primary);">$100000</span></div>
+        </div>
+        
+        <div class="channels-grid">
+            <div class="input-group"><label>Paid Search (PPC)</label><input type="number" id="ch_ppc" value="0" min="0" oninput="updateRemaining()"><span class="hint">High intent, predictable.</span></div>
+            <div class="input-group"><label>Paid Social</label><input type="number" id="ch_social" value="0" min="0" oninput="updateRemaining()"><span class="hint">Variable, scaleable.</span></div>
+            <div class="input-group"><label>SEO (Investment)</label><input type="number" id="ch_seo" value="0" min="0" oninput="updateRemaining()"><span class="hint">Builds momentum. No instant ROAS.</span></div>
+            <div class="input-group"><label>Programmatic</label><input type="number" id="ch_prog" value="0" min="0" oninput="updateRemaining()"><span class="hint">Cheap reach, low conversion.</span></div>
+            <div class="input-group"><label>Affiliate Marketing</label><input type="number" id="ch_affiliate" value="0" min="0" oninput="updateRemaining()"><span class="hint">Steady, very low risk.</span></div>
+            
+            <div class="input-group"><label>Email Blasts</label><input type="number" id="ch_email" value="0" min="0" oninput="updateRemaining()"><span class="hint">High ROAS, fatigues > $3k.</span></div>
+            <div class="input-group"><label>SMS Marketing</label><input type="number" id="ch_sms" value="0" min="0" oninput="updateRemaining()"><span class="hint">Highest ROAS, fatigues > $1k.</span></div>
+            <div class="input-group"><label>Direct Mail</label><input type="number" id="ch_mail" value="0" min="0" oninput="updateRemaining()"><span class="hint">Great for Performance briefs.</span></div>
+            
+            <div class="input-group"><label>Linear TV</label><input type="number" id="ch_tv" value="0" min="0" oninput="updateRemaining()"><span class="hint">$20k min. Builds Brand Halo.</span></div>
+            <div class="input-group"><label>Billboards</label><input type="number" id="ch_billboard" value="0" min="0" oninput="updateRemaining()"><span class="hint">Fixed safe return.</span></div>
+            <div class="input-group"><label>Cinema Ads</label><input type="number" id="ch_cinema" value="0" min="0" oninput="updateRemaining()"><span class="hint">Strong for Awareness.</span></div>
+            
+            <div class="input-group"><label>Podcast Ads</label><input type="number" id="ch_podcast" value="0" min="0" oninput="updateRemaining()"><span class="hint">Deep engagement.</span></div>
+            <div class="input-group"><label>Influencers</label><input type="number" id="ch_influencer" value="0" min="0" oninput="updateRemaining()"><span class="hint">Wildcard. Boom or bust.</span></div>
+        </div>
+
+        <div class="sticky-footer">
+            <button id="runBtn" onclick="runMonth()">Execute Campaign</button>
+        </div>
     </div>
 </div>
 
 <script>
-    let agencyFunds = 5000;
-    let currentMonth = 1;
-    let clientBudget = 50000;
-    let targetRoas = 2.0;
-    let clientPatience = 3;
-    
-    // Hidden Mechanics Variables
-    let seoMomentum = 0; 
-    let brandHalo = 1.0; // Acts as a multiplier for digital channels
+    // State
+    let state = {
+        month: 1, funds: 10000, budget: 100000, patience: 3,
+        halo: 1.0, seo: 0,
+        currentBrief: 'Performance', currentEvent: 'Normal'
+    };
 
-    function updateRemaining() {
-        let total = getSpendTotal();
-        let remaining = clientBudget - total;
-        let display = document.getElementById('remainingBudget');
-        display.innerText = remaining;
-        
-        if (remaining < 0) {
-            display.style.color = "red";
-            document.getElementById('runBtn').disabled = true;
+    const channels = ['ppc', 'social', 'seo', 'prog', 'affiliate', 'email', 'sms', 'mail', 'tv', 'billboard', 'cinema', 'podcast', 'influencer'];
+
+    // Brief & Event Definitions
+    const briefs = {
+        'Performance': { target: 2.5, desc: "Focus on direct sales. Favor PPC, Direct Mail, Email, SMS, Affiliate.", bonuses: ['ppc', 'mail', 'email', 'sms', 'affiliate'] },
+        'Awareness': { target: 1.2, desc: "Focus on reach. Favor TV, Billboards, Cinema, Podcasts, Programmatic.", bonuses: ['tv', 'billboard', 'cinema', 'podcast', 'prog'] },
+        'Retention': { target: 1.8, desc: "Focus on existing customers. Favor Social, Email, Influencer, SMS.", bonuses: ['social', 'email', 'influencer', 'sms'] }
+    };
+
+    const events = [
+        { name: 'Normal', desc: "Conditions stable." },
+        { name: 'Privacy Update', desc: "Social & Programmatic ROI drops 40%." },
+        { name: 'Holiday Rush', desc: "All conversions up, but costs are higher. Push hard!" },
+        { name: 'Viral Trend', desc: "Social Media and Influencer returns double." }
+    ];
+
+    function setupNextMonth() {
+        // Randomize Brief
+        const briefKeys = Object.keys(briefs);
+        state.currentBrief = briefKeys[Math.floor(Math.random() * briefKeys.length)];
+        let b = briefs[state.currentBrief];
+        document.getElementById('briefTitle').innerText = state.currentBrief;
+        document.getElementById('briefDesc').innerText = b.desc;
+        document.getElementById('targetRoas').innerText = b.target;
+
+        // Randomize Event (50% chance of Normal)
+        if(Math.random() > 0.5) {
+            let ev = events[Math.floor(Math.random() * (events.length - 1)) + 1];
+            state.currentEvent = ev.name;
+            document.getElementById('eventTitle').innerText = ev.name;
+            document.getElementById('eventDesc').innerText = ev.desc;
+            document.getElementById('eventCard').style.borderLeftColor = "red";
         } else {
-            display.style.color = "#2980b9";
-            document.getElementById('runBtn').disabled = (clientPatience <= 0);
+            state.currentEvent = 'Normal';
+            document.getElementById('eventTitle').innerText = events[0].name;
+            document.getElementById('eventDesc').innerText = events[0].desc;
+            document.getElementById('eventCard').style.borderLeftColor = "var(--success)";
         }
     }
 
-    function getSpendTotal() {
-        const ids = ['ppc', 'social', 'seo', 'programmatic', 'email', 'tv', 'print', 'billboard'];
+    function updateRemaining() {
         let total = 0;
-        ids.forEach(id => {
-            total += parseInt(document.getElementById(id).value) || 0;
-        });
-        return total;
+        channels.forEach(ch => total += parseInt(document.getElementById('ch_' + ch).value) || 0);
+        let rem = state.budget - total;
+        let el = document.getElementById('remainingBudget');
+        el.innerText = '$' + rem;
+        el.style.color = rem < 0 ? 'red' : 'var(--primary)';
+        document.getElementById('runBtn').disabled = (rem < 0 || state.patience <= 0);
     }
 
-    function log(message, type = "") {
-        const logArea = document.getElementById('logArea');
-        const entry = document.createElement('div');
-        entry.className = `log-entry ${type}`;
-        entry.innerHTML = `<strong>Month ${currentMonth}:</strong> ${message}`;
-        logArea.prepend(entry);
+    function log(msg, type="") {
+        const area = document.getElementById('logArea');
+        area.innerHTML = `<div class="log-entry ${type}"><strong>M${state.month}:</strong> ${msg}</div>` + area.innerHTML;
     }
 
     function runMonth() {
-        let spend = {
-            ppc: parseInt(document.getElementById('ppc').value) || 0,
-            social: parseInt(document.getElementById('social').value) || 0,
-            seo: parseInt(document.getElementById('seo').value) || 0,
-            programmatic: parseInt(document.getElementById('programmatic').value) || 0,
-            email: parseInt(document.getElementById('email').value) || 0,
-            tv: parseInt(document.getElementById('tv').value) || 0,
-            print: parseInt(document.getElementById('print').value) || 0,
-            billboard: parseInt(document.getElementById('billboard').value) || 0
+        let s = {}; // spends
+        let totalSpend = 0;
+        channels.forEach(ch => {
+            s[ch] = parseInt(document.getElementById('ch_' + ch).value) || 0;
+            totalSpend += s[ch];
+        });
+
+        if(totalSpend === 0) return alert("Allocate budget first!");
+        if(s.tv > 0 && s.tv < 20000) return alert("TV requires $20,000 minimum spend.");
+
+        // Calculate Mechanics
+        state.halo = Math.max(1.0, state.halo - 0.05);
+        if(s.tv >= 20000) state.halo += 0.25;
+        state.seo += (s.seo * 0.3);
+
+        let returns = {
+            ppc: s.ppc * (1.2 + Math.random()) * state.halo,
+            social: s.social * (0.5 + Math.random() * 2),
+            seo: state.seo * (1.0 + Math.random()),
+            prog: s.prog * (0.8 + Math.random() * 0.5) * state.halo,
+            affiliate: s.affiliate * 1.5,
+            email: s.email <= 3000 ? s.email * 3 : (3000 * 3) + ((s.email - 3000) * 0.1),
+            sms: s.sms <= 1000 ? s.sms * 4 : (1000 * 4) + ((s.sms - 1000) * 0.05),
+            mail: s.mail * (1.1 + Math.random() * 0.8),
+            tv: s.tv * 0.9,
+            billboard: s.billboard * 1.1,
+            cinema: s.cinema * (0.8 + Math.random()),
+            podcast: s.podcast * (1.0 + Math.random()),
+            influencer: s.influencer * (Math.random() * 4) // 0 to 4x multiplier
         };
 
-        let totalSpend = getSpendTotal();
+        // Apply Event Modifiers
+        if(state.currentEvent === 'Privacy Update') { returns.social *= 0.6; returns.prog *= 0.6; }
+        if(state.currentEvent === 'Holiday Rush') { for(let k in returns) returns[k] *= 1.4; }
+        if(state.currentEvent === 'Viral Trend') { returns.social *= 2.0; returns.influencer *= 2.0; }
 
-        if (totalSpend === 0) {
-            alert("You must allocate budget to run campaigns!");
-            return;
-        }
+        // Apply Brief Bonus (Client is happier when you buy what they want)
+        let briefRules = briefs[state.currentBrief];
+        briefRules.bonuses.forEach(b => { if(returns[b]) returns[b] *= 1.3; });
 
-        // TV Rule Enforcement
-        if (spend.tv > 0 && spend.tv < 10000) {
-            alert("Linear TV requires a minimum production and media spend of $10,000.");
-            return;
-        }
+        let totalRev = 0;
+        for(let k in returns) totalRev += returns[k];
+        let roas = (totalRev / totalSpend).toFixed(2);
 
-        // --- THE ADVANCED MATH ENGINE ---
-        
-        // Brand Halo Decay (decreases slowly over time if TV isn't maintained)
-        brandHalo = Math.max(1.0, brandHalo - 0.05);
-
-        // Digital (Boosted by Brand Halo)
-        let ppcReturn = spend.ppc * (1.5 + Math.random() * 1.0) * brandHalo;
-        let socialReturn = spend.social * (0.5 + Math.random() * 3.0) * brandHalo;
-        let progReturn = spend.programmatic * (1.0 + Math.random() * 0.8) * brandHalo;
-        
-        // SEO (Momentum based)
-        seoMomentum += (spend.seo * 0.4); 
-        let seoReturn = seoMomentum * (1.2 + Math.random() * 0.5);
-
-        // Email (Fatigue Mechanic)
-        let emailReturn = 0;
-        if (spend.email <= 2000) {
-            emailReturn = spend.email * (3.0 + Math.random() * 2.0); // Amazing return
+        // Resolve
+        let msg = `Spent $${totalSpend}. Rev: $${totalRev.toFixed(0)} (ROAS: ${roas}x). `;
+        if(roas >= briefRules.target) {
+            let fee = totalSpend * 0.15;
+            state.funds += fee;
+            msg += `Target hit! Earned $${fee.toFixed(0)} fee.`;
+            log(msg, "success");
+            if(roas > briefRules.target + 0.5 && state.patience < 5) state.patience++;
         } else {
-            // First $2k gets great return, anything over gets punished severely
-            emailReturn = (2000 * (3.0 + Math.random() * 2.0)) + ((spend.email - 2000) * 0.2); 
-            log("Email list fatigued! Spend over $2,000 yielded poor results.", "warning");
+            state.patience--;
+            msg += `Missed target of ${briefRules.target}x.`;
+            log(msg, "danger");
         }
 
-        // Traditional (Not affected by Brand Halo)
-        let tvReturn = spend.tv * (0.8 + Math.random() * 0.6); // OK return, but...
-        if (spend.tv >= 10000) brandHalo += 0.2; // Boosts future digital!
-        
-        let printReturn = spend.print * (0.7 + Math.random() * 0.5); // Declining medium
-        let billboardReturn = spend.billboard * 1.2; // Steady, safe floor
+        // Update UI
+        state.month++;
+        document.getElementById('agencyFunds').innerText = state.funds.toFixed(0);
+        document.getElementById('monthDisplay').innerText = state.month;
+        document.getElementById('haloDisplay').innerText = state.halo.toFixed(2);
+        document.getElementById('seoDisplay').innerText = state.seo.toFixed(0);
+        document.getElementById('patienceDisplay').innerText = "⭐".repeat(Math.max(0, state.patience));
 
-        let totalRevenue = ppcReturn + socialReturn + progReturn + seoReturn + emailReturn + tvReturn + printReturn + billboardReturn;
-        let currentRoas = (totalRevenue / totalSpend).toFixed(2);
-
-        // --- RESOLVE MONTH ---
-        let resultMsg = `Spent $${totalSpend}. Generated $${totalRevenue.toFixed(0)} (ROAS: ${currentRoas}x). `;
-
-        if (currentRoas >= targetRoas) {
-            let agencyFee = totalSpend * 0.15;
-            agencyFunds += agencyFee;
-            resultMsg += `Hit target! Client paid $${agencyFee.toFixed(0)} fee.`;
-            log(resultMsg, "success");
-            if (currentRoas > targetRoas + 0.5 && clientPatience < 3) clientPatience++;
-        } else {
-            clientPatience--;
-            resultMsg += `Missed target. Client patience dropped.`;
-            log(resultMsg, "danger");
-        }
-
-        // Update UI State
-        currentMonth++;
-        document.getElementById('agencyFunds').innerText = agencyFunds.toFixed(0);
-        document.getElementById('monthDisplay').innerText = currentMonth;
-        document.getElementById('haloDisplay').innerText = brandHalo.toFixed(2);
-        
-        let stars = "";
-        for(let i=0; i<clientPatience; i++) stars += "⭐";
-        document.getElementById('patienceDisplay').innerText = stars || "NONE";
-
-        if (clientPatience <= 0) {
-            log("CLIENT FIRED YOU. Game Over.", "danger");
+        if(state.patience <= 0) {
+            log("FIRED BY CLIENT. GAME OVER.", "danger");
             document.getElementById('runBtn').disabled = true;
+        } else {
+            setupNextMonth();
+            // Reset inputs
+            channels.forEach(ch => document.getElementById('ch_'+ch).value = 0);
+            updateRemaining();
         }
     }
+
+    // Init
+    setupNextMonth();
 </script>
 </body>
 </html>
