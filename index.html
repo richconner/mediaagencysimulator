@@ -118,6 +118,12 @@
                         <button onclick="updateHR('dir', -1)">-</button><span id="dirCount">0</span><button onclick="updateHR('dir', 1)">+</button>
                     </div>
                 </div>
+                <div class="role-card" style="border-color: #fcd34d; background: #fffbeb;">
+                    <div class="role-info"><strong>Acct Mgr</strong> ($6k)<br><span class="hint">Client Relations (Min 1)</span></div>
+                    <div class="role-controls">
+                        <button onclick="updateHR('am', -1)">-</button><span id="amCount">1</span><button onclick="updateHR('am', 1)">+</button>
+                    </div>
+                </div>
                 <div class="role-card">
                     <div class="role-info"><strong>Sr Strat</strong> ($8k)<br><span class="hint">$150k Cap</span></div>
                     <div class="role-controls">
@@ -132,7 +138,7 @@
                 </div>
             </div>
             <div class="payroll-alert">
-                Monthly Overhead: <strong>-$<span id="payrollTotal">42,000</span></strong>
+                Monthly Overhead: <strong>-$<span id="payrollTotal">48,000</span></strong>
             </div>
         </div>
 
@@ -150,7 +156,7 @@
         </div>
         
         <div class="version-tag">
-            Media Agency Simulator v1.2.0
+            Media Agency Simulator v1.3.0
         </div>
     </div>
 
@@ -234,7 +240,7 @@
         </div>
         
         <div class="log-area" id="logArea">
-            <div class="log-entry">System v1.2.0 initialized. Read channel hints carefully! 25 Channels are now unlocked.</div>
+            <div class="log-entry">System v1.3.0 initialized. Watch out for specialized scenarios and scale your Account Management team carefully.</div>
         </div>
     </div>
 </div>
@@ -242,7 +248,7 @@
 <script>
     let state = { 
         month: 1, balance: 100000, clientBudget: 500000, patience: 3, halo: 1.0, seo: 0, loyaltyBoost: false,
-        hr: { ceo: 1, dir: 0, jr: 1, sr: 3 }, 
+        hr: { ceo: 1, dir: 0, am: 1, jr: 1, sr: 3 }, 
         briefHistory: [], currentBrief: 'Performance', currentEvent: 'Normal' 
     };
     
@@ -255,7 +261,6 @@
         'ingame', 'community'
     ];
     
-    // Updated & New Scenarios
     const briefs = {
         'Performance': { target: 2.5, special: false, desc: "Focus strictly on direct sales and immediate ROI. Brand building is secondary.", bonuses: ['ppc', 'mail', 'email', 'sms', 'affiliate', 'retail'], feedback: "Performance briefs demand high-intent channels like Paid Search and Retail Media (Amazon)." },
         'Awareness': { target: 1.2, special: false, desc: "Maximize reach and brand visibility. The client wants everyone to see their logo.", bonuses: ['tv', 'ctv', 'billboard', 'cinema', 'podcast', 'prog', 'transit'], feedback: "Awareness requires broad reach. TV, CTV, Transit, and Billboards are ideal for top-of-funnel branding." },
@@ -273,7 +278,7 @@
         'E-commerce Cart Abandonment': { target: 3.0, special: true, desc: "Thousands of users left items in their carts. Bring them back to checkout.", bonuses: ['email', 'prog', 'sms', 'retail'], feedback: "Winning back lost carts relies on retargeting via Programmatic and direct nudges via Email/SMS." },
         'Medicare Plan Enrollment': { target: 1.5, special: true, desc: "Targeting seniors aged 65+ to switch their healthcare plans.", bonuses: ['tv', 'mail', 'print', 'telemarketing'], feedback: "Older demographics index highly on Linear TV, Print, Telemarketing, and physical Direct Mail." },
         'Niche Hobbyist Product': { target: 2.5, special: true, desc: "Selling $500 custom mechanical keyboards to enthusiasts.", bonuses: ['affiliate', 'podcast', 'community', 'seo'], feedback: "Niche communities are best reached through trusted podcast hosts, Subreddits, and SEO." },
-        'End of Q4 Budget Burn': { target: 0.8, special: true, desc: "The client has $500k left they MUST spend or lose next year. Spend it fast.", bonuses: ['prog', 'tv', 'billboard', 'ctv'], feedback: "When clients just need to spend budget quickly, buy high-volume, broad-reach inventory like TV and CTV." },
+        'End of Q4 Budget Burn': { target: 0.8, special: true, desc: "The client has a massive budget left they MUST spend or lose next year. Spend it fast.", bonuses: ['prog', 'tv', 'billboard', 'ctv'], feedback: "During a Budget Burn, under-spending is severely punished by Finance. Make sure you clear out the budget!" },
         'Competitor Attack Ads': { target: 1.5, special: true, desc: "A rival launched a campaign against us. Fire back and steal their traffic.", bonuses: ['ppc', 'social', 'pr', 'branded'], feedback: "Defend your brand terms on PPC, address the community on Social, and issue PR statements." },
         'Luxury Brand Exclusivity': { target: 1.0, special: true, desc: "Promoting a $10,000 watch. Avoid cheap placements; maintain prestige.", bonuses: ['cinema', 'mail', 'podcast', 'print'], feedback: "Luxury avoids cheap inventory, preferring high-production Cinema, high-end Print, and premium Catalogs." },
         'Flash Sale (24 Hours)': { target: 3.5, special: true, desc: "Everything is 50% off, but only for today. We need instant eyeballs.", bonuses: ['sms', 'email', 'social'], feedback: "Flash sales need instant delivery. SMS and Email bypass algorithms to guarantee immediate eyeballs." },
@@ -353,7 +358,7 @@
     }
 
     function validateForm() {
-        let payroll = (state.hr.ceo * 15000) + (state.hr.dir * 12000) + (state.hr.jr * 3000) + (state.hr.sr * 8000);
+        let payroll = (state.hr.ceo * 15000) + (state.hr.dir * 12000) + (state.hr.am * 6000) + (state.hr.jr * 3000) + (state.hr.sr * 8000);
         let capacity = (state.hr.jr * 50000) + (state.hr.sr * 150000); 
         
         let totalBuyers = state.hr.jr + state.hr.sr;
@@ -372,6 +377,7 @@
         let isValid = true;
         
         if (state.hr.ceo !== 1) { elAllocated.style.color = "var(--danger)"; btnRun.innerText = "Agency requires 1 CEO"; isValid = false; }
+        else if (state.hr.am < 1) { elAllocated.style.color = "var(--danger)"; btnRun.innerText = "Agency requires ≥ 1 Acct Mgr"; isValid = false; }
         else if (state.hr.dir < requiredDirs) { elAllocated.style.color = "var(--danger)"; btnRun.innerText = `Hire ${requiredDirs - state.hr.dir} more Director(s)`; isValid = false; }
         else if (mediaSpend > state.clientBudget) { elAllocated.style.color = "var(--danger)"; btnRun.innerText = "Over Client Budget"; isValid = false; }
         else if (mediaSpend > capacity) { elAllocated.style.color = "var(--warning)"; btnRun.innerText = "Exceeds Capacity"; isValid = false; }
@@ -395,6 +401,8 @@
 
     function runMonth() {
         let s = {}; let mediaSpend = 0;
+        let startingBudget = state.clientBudget;
+        
         channels.forEach(ch => { s[ch] = parseInt(document.getElementById('ch_' + ch).value) || 0; mediaSpend += s[ch]; });
 
         // Channel Rules
@@ -402,7 +410,7 @@
         if(s.ctv > 0 && s.ctv < 10000) return alert("CTV requires a $10k minimum spend.");
         if(s.experiential > 0 && s.experiential !== 15000) return alert("Experiential Stunts require exactly a $15,000 flat fee.");
 
-        let payroll = (state.hr.ceo * 15000) + (state.hr.dir * 12000) + (state.hr.jr * 3000) + (state.hr.sr * 8000);
+        let payroll = (state.hr.ceo * 15000) + (state.hr.dir * 12000) + (state.hr.am * 6000) + (state.hr.jr * 3000) + (state.hr.sr * 8000);
         state.balance -= payroll;
         
         if (state.balance < 0) { 
@@ -494,6 +502,14 @@
             state.clientBudget -= decrease;
             msg += `Missed target of ${briefRules.target}x. Earned $${fmt(Math.round(fee))} (5%). Budget ⬇️ ${(budgetChangePct*100).toFixed(1)}%.`; 
             log(`[M${state.month}] ` + msg, "text-warning");
+        }
+
+        // Q4 BUDGET BURN RISK: "Use It or Lose It"
+        let unspent = startingBudget - mediaSpend;
+        if (state.currentBrief === 'End of Q4 Budget Burn' && unspent > (startingBudget * 0.05)) {
+            state.patience--;
+            state.clientBudget -= unspent; // Permanently slash future budget based on what was left
+            log(`[M${state.month}] CRITICAL FAILURE: You left $${fmt(Math.round(unspent))} on the table during a Budget Burn! Finance slashed future budgets and you lost 1 ⭐.`, "text-danger");
         }
 
         log(`💡 <strong>Agency Insight:</strong> ${briefRules.feedback}`, "text-info");
