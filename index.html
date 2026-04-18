@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Media Agency Sim: Agency Operations Edition</title>
+    <title>Media Agency Sim: Corporate Scaling</title>
     <style>
         :root { --bg: #f4f5f7; --text: #1e293b; --panel: #ffffff; --primary: #3b82f6; --success: #10b981; --danger: #ef4444; --warning: #f59e0b; --info: #0ea5e9; --border: #e2e8f0; --hint: #64748b; }
         body { font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding: 15px; font-size: 14px; line-height: 1.4; }
-        .container { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: 320px 1fr; gap: 15px; }
+        .container { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: 340px 1fr; gap: 15px; }
         
         /* Header */
         .header { grid-column: 1 / -1; display: flex; justify-content: space-between; align-items: center; background: #0f172a; color: white; padding: 12px 20px; border-radius: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
@@ -23,14 +23,15 @@
         h2 { margin: 0 0 10px 0; font-size: 1.1em; color: #334155; border-bottom: 1px solid var(--border); padding-bottom: 6px; }
         
         /* HR Controls */
-        .hr-grid { display: flex; gap: 10px; margin-bottom: 10px; }
-        .role-card { flex: 1; background: #f8fafc; border: 1px solid var(--border); padding: 8px; border-radius: 4px; text-align: center; }
+        .hr-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px; }
+        .role-card { background: #f8fafc; border: 1px solid var(--border); padding: 8px; border-radius: 4px; text-align: center; }
         .role-info { font-size: 0.8em; margin-bottom: 6px; color: #475569; }
+        .role-info strong { display: block; color: var(--text); }
         .role-controls { display: flex; justify-content: center; align-items: center; gap: 8px; }
         .role-controls button { width: 24px; height: 24px; border-radius: 4px; border: 1px solid #cbd5e1; background: white; cursor: pointer; color: var(--text); font-weight: bold; }
         .role-controls button:hover { background: #e2e8f0; }
         .role-controls span { font-weight: bold; font-size: 1.1em; width: 16px; }
-        .payroll-alert { background: #fffbeb; color: #b45309; padding: 8px; border-radius: 4px; text-align: center; font-size: 0.85em; border: 1px solid #fde68a; }
+        .payroll-alert { background: #fffbeb; color: #b45309; padding: 8px; border-radius: 4px; text-align: center; font-size: 0.85em; border: 1px solid #fde68a; margin-top: 5px; }
         
         /* Brief & Market */
         .card { padding: 10px 12px; border-radius: 4px; margin-bottom: 10px; border-left: 3px solid; }
@@ -100,23 +101,35 @@
 
     <div class="sidebar">
         <div class="panel">
-            <h2>Operations (HR)</h2>
+            <h2>Operations & HR</h2>
             <div class="hr-grid">
-                <div class="role-card">
-                    <div class="role-info"><strong>Jr Buyer</strong> ($3k)</div>
+                <div class="role-card" style="border-color: #a78bfa; background: #f5f3ff;">
+                    <div class="role-info"><strong>CEO</strong> ($15k)<br><span class="hint">Required</span></div>
                     <div class="role-controls">
-                        <button onclick="updateHR('jr', -1)">-</button><span id="jrCount">1</span><button onclick="updateHR('jr', 1)">+</button>
+                        <button onclick="updateHR('ceo', -1)">-</button><span id="ceoCount">1</span><button onclick="updateHR('ceo', 1)">+</button>
+                    </div>
+                </div>
+                <div class="role-card" style="border-color: #93c5fd; background: #eff6ff;">
+                    <div class="role-info"><strong>Director</strong> ($12k)<br><span class="hint">Manages 5 Buyers</span></div>
+                    <div class="role-controls">
+                        <button onclick="updateHR('dir', -1)">-</button><span id="dirCount">0</span><button onclick="updateHR('dir', 1)">+</button>
                     </div>
                 </div>
                 <div class="role-card">
-                    <div class="role-info"><strong>Sr Strat</strong> ($8k)</div>
+                    <div class="role-info"><strong>Sr Strat</strong> ($8k)<br><span class="hint">$80k Cap</span></div>
                     <div class="role-controls">
                         <button onclick="updateHR('sr', -1)">-</button><span id="srCount">0</span><button onclick="updateHR('sr', 1)">+</button>
                     </div>
                 </div>
+                <div class="role-card">
+                    <div class="role-info"><strong>Jr Buyer</strong> ($3k)<br><span class="hint">$30k Cap</span></div>
+                    <div class="role-controls">
+                        <button onclick="updateHR('jr', -1)">-</button><span id="jrCount">1</span><button onclick="updateHR('jr', 1)">+</button>
+                    </div>
+                </div>
             </div>
             <div class="payroll-alert">
-                Payroll (Deducted from Agency): <strong>-$<span id="payrollTotal">3,000</span></strong>
+                Monthly Overhead: <strong>-$<span id="payrollTotal">18,000</span></strong>
             </div>
         </div>
 
@@ -190,13 +203,17 @@
         </div>
         
         <div class="log-area" id="logArea">
-            <div class="log-entry">System ready. Deduce the correct media mix based on the scenario! Post-campaign insights will appear here.</div>
+            <div class="log-entry">System ready. Note: Directors are required as you scale your buying team (1 Director per 5 Buyers).</div>
         </div>
     </div>
 </div>
 
 <script>
-    let state = { month: 1, balance: 100000, clientBudget: 100000, patience: 3, halo: 1.0, seo: 0, hr: { jr: 1, sr: 0 }, currentBrief: 'Performance', currentEvent: 'Normal' };
+    let state = { 
+        month: 1, balance: 100000, clientBudget: 100000, patience: 3, halo: 1.0, seo: 0, 
+        hr: { ceo: 1, dir: 0, jr: 1, sr: 0 }, 
+        lastBrief: '', currentBrief: 'Performance', currentEvent: 'Normal' 
+    };
     const channels = ['ppc', 'social', 'seo', 'prog', 'affiliate', 'email', 'sms', 'mail', 'tv', 'billboard', 'cinema', 'podcast', 'influencer'];
     
     const briefs = {
@@ -249,6 +266,9 @@
     const fmt = num => num.toLocaleString();
 
     function updateHR(type, change) {
+        // Enforce CEO constraints (min 0, max 1)
+        if (type === 'ceo' && (state.hr.ceo + change > 1 || state.hr.ceo + change < 0)) return;
+        
         if (state.hr[type] + change >= 0) {
             state.hr[type] += change;
             document.getElementById(type + 'Count').innerText = state.hr[type];
@@ -263,7 +283,12 @@
 
     function setupNextMonth() {
         const briefKeys = Object.keys(briefs);
-        state.currentBrief = briefKeys[Math.floor(Math.random() * briefKeys.length)];
+        
+        // Prevent back-to-back duplicate briefs
+        let availableBriefs = briefKeys.filter(k => k !== state.lastBrief);
+        state.currentBrief = availableBriefs[Math.floor(Math.random() * availableBriefs.length)];
+        state.lastBrief = state.currentBrief; // Store for next month
+        
         let b = briefs[state.currentBrief];
         
         document.getElementById('briefTitle').innerText = state.currentBrief;
@@ -295,8 +320,12 @@
     }
 
     function validateForm() {
-        let payroll = (state.hr.jr * 3000) + (state.hr.sr * 8000);
+        let payroll = (state.hr.ceo * 15000) + (state.hr.dir * 12000) + (state.hr.jr * 3000) + (state.hr.sr * 8000);
         let capacity = (state.hr.jr * 30000) + (state.hr.sr * 80000);
+        
+        // Management Math: 1 Director needed for every 5 buyers.
+        let totalBuyers = state.hr.jr + state.hr.sr;
+        let requiredDirs = Math.max(0, Math.ceil(totalBuyers / 5) - 1);
         
         let mediaSpend = 0;
         channels.forEach(ch => mediaSpend += parseInt(document.getElementById('ch_' + ch).value) || 0);
@@ -309,7 +338,9 @@
         let btnRun = document.getElementById('runBtn');
         let isValid = true;
         
-        if (mediaSpend > state.clientBudget) { elAllocated.style.color = "var(--danger)"; btnRun.innerText = "Over Client Budget"; isValid = false; }
+        if (state.hr.ceo !== 1) { elAllocated.style.color = "var(--danger)"; btnRun.innerText = "Agency requires 1 CEO"; isValid = false; }
+        else if (state.hr.dir < requiredDirs) { elAllocated.style.color = "var(--danger)"; btnRun.innerText = `Hire ${requiredDirs - state.hr.dir} more Director(s)`; isValid = false; }
+        else if (mediaSpend > state.clientBudget) { elAllocated.style.color = "var(--danger)"; btnRun.innerText = "Over Client Budget"; isValid = false; }
         else if (mediaSpend > capacity) { elAllocated.style.color = "var(--warning)"; btnRun.innerText = "Exceeds Capacity"; isValid = false; }
         else if (mediaSpend === 0) { elAllocated.style.color = "var(--text)"; btnRun.innerText = "Enter Spend Allocation"; isValid = false; }
         else { elAllocated.style.color = "var(--success)"; btnRun.innerText = `Execute Campaign`; }
@@ -329,13 +360,13 @@
 
         if(s.tv > 0 && s.tv < 20000) return alert("Linear TV requires a $20k minimum spend.");
 
-        // Agency pays payroll from its own balance
-        let payroll = (state.hr.jr * 3000) + (state.hr.sr * 8000);
+        // Agency pays overhead from its own balance
+        let payroll = (state.hr.ceo * 15000) + (state.hr.dir * 12000) + (state.hr.jr * 3000) + (state.hr.sr * 8000);
         state.balance -= payroll;
         
         if (state.balance < 0) { 
             document.getElementById('agencyBalance').innerText = fmt(Math.round(state.balance)); 
-            log(`BANKRUPT. Payroll of $${fmt(payroll)} pushed you into the red. GAME OVER.`, "text-danger"); 
+            log(`BANKRUPT. Overhead of $${fmt(payroll)} pushed you into the red. GAME OVER.`, "text-danger"); 
             document.getElementById('runBtn').disabled = true; 
             return; 
         }
