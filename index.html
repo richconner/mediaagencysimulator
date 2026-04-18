@@ -70,6 +70,7 @@
         .text-success { color: #34d399; }
         .text-danger { color: #f87171; }
         .text-warning { color: #fbbf24; }
+        .text-special { color: #a78bfa; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -120,7 +121,7 @@
 
         <div class="panel">
             <h2>Market Context</h2>
-            <div class="card brief-card">
+            <div class="card brief-card" id="briefCardBox">
                 <span class="card-title">Brief: <span id="briefTitle">Performance</span></span>
                 <div class="card-desc" id="briefDesc">Focus on direct sales. Favor PPC, Direct Mail, Email.</div>
                 <div style="margin-top: 6px; font-weight: bold; color: var(--primary);">Target ROAS: <span id="targetRoas">2.5</span>x</div>
@@ -181,30 +182,39 @@
             </div>
         </div>
 
-        <div style="flex-grow: 1;"></div> <div class="action-bar">
+        <div style="flex-grow: 1;"></div>
+
+        <div class="action-bar">
             <button id="runBtn" class="btn-run" onclick="runMonth()" disabled>Execute Campaign</button>
         </div>
         
         <div class="log-area" id="logArea">
-            <div class="log-entry">System ready. $100k client budget secured. Payroll pulls from client budget.</div>
+            <div class="log-entry">System ready. Look out for Special Briefs and Market Events.</div>
         </div>
     </div>
 </div>
 
 <script>
-    // System State
     let state = { month: 1, funds: 25000, clientBudget: 100000, patience: 3, halo: 1.0, seo: 0, hr: { jr: 1, sr: 0 }, currentBrief: 'Performance', currentEvent: 'Normal' };
     const channels = ['ppc', 'social', 'seo', 'prog', 'affiliate', 'email', 'sms', 'mail', 'tv', 'billboard', 'cinema', 'podcast', 'influencer'];
     
+    // NEW UNIQUE SCENARIOS ADDED HERE
     const briefs = {
-        'Performance': { target: 2.5, desc: "Focus on direct sales. Favor PPC, Direct Mail, Email, SMS, Affiliate.", bonuses: ['ppc', 'mail', 'email', 'sms', 'affiliate'] },
-        'Awareness': { target: 1.2, desc: "Focus on reach. Favor TV, Billboards, Cinema, Podcasts, Programmatic.", bonuses: ['tv', 'billboard', 'cinema', 'podcast', 'prog'] },
-        'Retention': { target: 1.8, desc: "Focus on existing customers. Favor Social, Email, Influencer, SMS.", bonuses: ['social', 'email', 'influencer', 'sms'] }
+        'Performance': { target: 2.5, special: false, desc: "Focus on direct sales. Favor PPC, Direct Mail, Email, SMS, Affiliate.", bonuses: ['ppc', 'mail', 'email', 'sms', 'affiliate'] },
+        'Awareness': { target: 1.2, special: false, desc: "Focus on reach. Favor TV, Billboards, Cinema, Podcasts, Programmatic.", bonuses: ['tv', 'billboard', 'cinema', 'podcast', 'prog'] },
+        'Retention': { target: 1.8, special: false, desc: "Focus on existing customers. Favor Social, Email, Influencer, SMS.", bonuses: ['social', 'email', 'influencer', 'sms'] },
+        'CEO Vanity Project': { target: 0.8, special: true, desc: "The CEO just wants to see their own face online. Buy heavy Programmatic and Social.", bonuses: ['social', 'prog', 'podcast'] },
+        'B2B Event Blitz': { target: 1.5, special: true, desc: "Major industry trade show this month. Blanket the venue with Billboards, Mail, and Email.", bonuses: ['billboard', 'mail', 'email'] },
+        'PR Damage Control': { target: 0.5, special: true, desc: "An executive made a public blunder. Buy Brand PPC, TV, and Social to control the narrative.", bonuses: ['ppc', 'tv', 'social'] }
     };
+    
+    // NEW MARKET EVENTS ADDED HERE
     const events = [
         { name: 'Normal', desc: "Conditions stable." },
         { name: 'Privacy Update', desc: "Social & Programmatic ROI drops 40%." },
-        { name: 'Holiday Rush', desc: "All conversions up, but costs are higher." }
+        { name: 'Holiday Rush', desc: "All conversions up, but costs are higher." },
+        { name: 'Viral Meme', desc: "A TikTok went viral! Influencer & Social returns doubled." },
+        { name: 'Competitor Collapsed', desc: "A rival went bust. PPC and Affiliate are highly lucrative this month." }
     ];
 
     const fmt = num => num.toLocaleString();
@@ -226,9 +236,19 @@
         const briefKeys = Object.keys(briefs);
         state.currentBrief = briefKeys[Math.floor(Math.random() * briefKeys.length)];
         let b = briefs[state.currentBrief];
+        
         document.getElementById('briefTitle').innerText = state.currentBrief;
         document.getElementById('briefDesc').innerText = b.desc;
         document.getElementById('targetRoas').innerText = b.target;
+        
+        if (b.special) {
+            document.getElementById('briefCardBox').style.borderColor = "#8b5cf6"; // Purple for special briefs
+            document.getElementById('briefCardBox').style.backgroundColor = "#f5f3ff";
+            log(`CRITICAL BRIEF: ${state.currentBrief}. Adjust strategy accordingly.`, "text-special");
+        } else {
+            document.getElementById('briefCardBox').style.borderColor = "var(--primary)";
+            document.getElementById('briefCardBox').style.backgroundColor = "#eff6ff";
+        }
 
         if(Math.random() > 0.4) {
             let ev = events[Math.floor(Math.random() * (events.length - 1)) + 1];
@@ -240,7 +260,7 @@
             state.currentEvent = 'Normal';
             document.getElementById('eventTitle').innerText = events[0].name;
             document.getElementById('eventDesc').innerText = events[0].desc;
-            document.getElementById('eventCard').style.borderColor = "var(--warning)"; // Reset to warning color for visual hierarchy
+            document.getElementById('eventCard').style.borderColor = "var(--warning)"; 
         }
         updateMood();
     }
@@ -301,8 +321,11 @@
             podcast: s.podcast * (1.0 + Math.random()), influencer: s.influencer * (Math.random() * 4) * srBuff
         };
 
+        // NEW EVENT MODIFIERS ADDED HERE
         if(state.currentEvent === 'Privacy Update') { returns.social *= 0.6; returns.prog *= 0.6; }
         if(state.currentEvent === 'Holiday Rush') { for(let k in returns) returns[k] *= 1.4; }
+        if(state.currentEvent === 'Viral Meme') { returns.social *= 2.0; returns.influencer *= 2.0; }
+        if(state.currentEvent === 'Competitor Collapsed') { returns.ppc *= 1.5; returns.affiliate *= 1.5; }
 
         let briefRules = briefs[state.currentBrief];
         briefRules.bonuses.forEach(b => { if(returns[b]) returns[b] *= 1.3; });
