@@ -7,58 +7,63 @@
     <style>
         :root { --bg: #f4f5f7; --text: #1e293b; --panel: #ffffff; --primary: #3b82f6; --success: #10b981; --danger: #ef4444; --warning: #f59e0b; --info: #0ea5e9; --border: #e2e8f0; --hint: #64748b; }
         body { font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding: 15px; font-size: 13px; line-height: 1.4; }
-        .container { max-width: 1500px; margin: 0 auto; display: grid; grid-template-columns: 340px 1fr; gap: 15px; align-items: start; }
+        .container { max-width: 1500px; margin: 0 auto; display: flex; flex-direction: column; gap: 15px; align-items: stretch; }
         
-        /* Header & Main Stats Dashboard */
-        .header { grid-column: 1 / -1; display: flex; flex-direction: column; align-items: center; background: #0f172a; color: white; padding: 25px 20px; border-radius: 6px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); gap: 20px; }
-        .header h1 { margin: 0; font-size: 1.8em; letter-spacing: -0.5px; display: flex; align-items: center; gap: 12px; }
+        /* Dashboard Header (Inline & Prominent) */
+        .header { display: flex; justify-content: space-between; align-items: center; background: #0f172a; color: white; padding: 15px 25px; border-radius: 6px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .header h1 { margin: 0; font-size: 1.8em; letter-spacing: -0.5px; display: flex; align-items: center; gap: 12px; white-space: nowrap; }
         .version-badge { font-size: 0.55em; background: rgba(255,255,255,0.1); padding: 4px 10px; border-radius: 12px; font-weight: normal; letter-spacing: 0.5px; color: #cbd5e1; }
         
-        .stat-block { display: flex; gap: 0; width: 100%; justify-content: center; align-items: center; border-top: 1px solid #334155; padding-top: 20px; }
-        .stat-item { display: flex; flex-direction: column; align-items: center; padding: 0 45px; border-right: 1px solid #334155; }
-        .stat-item:last-child { border-right: none; }
-        .stat-label { font-size: 0.85em; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
-        .stat-value { font-size: 2em; font-weight: bold; line-height: 1.1; }
-        .stat-value.small { font-size: 1.4em; color: #cbd5e1; margin-top: 6px; }
+        .stat-block { display: flex; gap: 20px; align-items: center; justify-content: flex-end; flex-grow: 1; }
+        .stat-item { display: flex; flex-direction: column; align-items: center; padding: 0 20px; border-left: 1px solid #334155; }
+        .stat-item:first-child { border-left: none; }
+        .stat-label { font-size: 0.8em; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+        .stat-value { font-size: 1.7em; font-weight: bold; line-height: 1.1; }
+        .stat-value.small { font-size: 1.3em; color: #cbd5e1; margin-top: 4px; }
         
         /* Panels */
         .panel { background: var(--panel); padding: 15px; border-radius: 6px; border: 1px solid var(--border); box-shadow: 0 1px 2px rgba(0,0,0,0.03); }
-        .sidebar { display: flex; flex-direction: column; gap: 15px; height: 100%; }
-        h2 { margin: 0 0 10px 0; font-size: 1.1em; color: #334155; border-bottom: 1px solid var(--border); padding-bottom: 6px; }
+        h2 { margin: 0 0 10px 0; font-size: 1.2em; color: #334155; border-bottom: 1px solid var(--border); padding-bottom: 6px; }
         
-        /* Market Context (Full Width) */
-        .market-panel { grid-column: 1 / -1; display: flex; flex-direction: column; gap: 10px; }
-        .market-grid { display: flex; gap: 15px; }
+        /* Strategic Split (Market & HR) */
+        .strategic-split { display: grid; grid-template-columns: 3fr 1fr; gap: 15px; align-items: stretch; }
+
+        /* Market Context */
+        .market-panel { display: flex; flex-direction: column; gap: 10px; height: 100%; box-sizing: border-box; }
+        .market-grid { display: flex; gap: 15px; flex-grow: 1; align-items: stretch;}
         .market-grid .card { padding: 18px 24px; border-radius: 6px; border-left: 4px solid; margin: 0; display: flex; flex-direction: column; justify-content: center; }
         .market-grid .brief-card { background: #eff6ff; border-color: var(--primary); flex: 2; }
         .market-grid .event-card { background: #fff7ed; border-color: var(--warning); flex: 1; }
-        .market-grid .card-title { font-weight: bold; margin-bottom: 8px; display: block; font-size: 1.4em; color: #1e293b; }
-        .market-grid .card-desc { font-size: 1.15em; color: #334155; line-height: 1.5; }
-        .market-roas { margin-top: 12px; font-weight: bold; color: var(--primary); font-size: 1.25em; }
+        .market-grid .card-title { font-weight: bold; margin-bottom: 8px; display: block; font-size: 1.3em; color: #1e293b; }
+        .market-grid .card-desc { font-size: 1.1em; color: #334155; line-height: 1.4; }
+        .market-roas { margin-top: auto; padding-top: 12px; font-weight: bold; color: var(--primary); font-size: 1.2em; }
 
         /* HR Controls */
-        .hr-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px; }
-        .role-card { background: #f8fafc; border: 1px solid var(--border); padding: 8px; border-radius: 4px; text-align: center; }
-        .role-info { font-size: 0.85em; margin-bottom: 6px; color: #475569; }
-        .role-info strong { display: block; color: var(--text); }
-        .role-controls { display: flex; justify-content: center; align-items: center; gap: 8px; }
-        .role-controls button { width: 24px; height: 24px; border-radius: 4px; border: 1px solid #cbd5e1; background: white; cursor: pointer; color: var(--text); font-weight: bold; }
+        .hr-panel { display: flex; flex-direction: column; height: 100%; box-sizing: border-box; }
+        .hr-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 10px; flex-grow: 1; align-items: start;}
+        .role-card { background: #f8fafc; border: 1px solid var(--border); padding: 6px; border-radius: 4px; text-align: center; }
+        .role-info { font-size: 0.8em; margin-bottom: 4px; color: #475569; line-height: 1.2;}
+        .role-info strong { display: block; color: var(--text); font-size: 1.1em; margin-bottom: 2px;}
+        .role-info .hint { font-size: 0.9em; }
+        .role-controls { display: flex; justify-content: center; align-items: center; gap: 6px; }
+        .role-controls button { width: 22px; height: 22px; border-radius: 4px; border: 1px solid #cbd5e1; background: white; cursor: pointer; color: var(--text); font-weight: bold; line-height: 1;}
         .role-controls button:hover { background: #e2e8f0; }
         .role-controls span { font-weight: bold; font-size: 1.1em; width: 16px; }
         
-        .payroll-alert { background: #f1f5f9; color: #334155; padding: 8px; border-radius: 4px; text-align: center; font-size: 0.95em; border: 1px solid #e2e8f0; margin-top: 5px; font-weight: 500;}
-        .hr-rules { font-size: 0.85em; text-align: center; margin-top: 8px; padding: 8px; border-radius: 4px; transition: all 0.3s ease; }
+        .payroll-alert { background: #f1f5f9; color: #334155; padding: 6px; border-radius: 4px; text-align: center; font-size: 0.95em; border: 1px solid #e2e8f0; margin-top: 5px; font-weight: 500;}
+        .hr-rules { font-size: 0.85em; text-align: center; margin-top: 6px; padding: 6px; border-radius: 4px; transition: all 0.3s ease; }
         .hr-rules.warning { background: #fffbeb; color: #b45309; border: 1px dashed #fcd34d; }
         .hr-rules.waived { background: #ecfdf5; color: #065f46; border: 1px solid #6ee7b7; }
         
-        /* Allocations */
-        .allocation-header { display: flex; gap: 10px; margin-bottom: 15px; }
-        .tracker { flex: 1; background: #f8fafc; border: 1px solid var(--border); padding: 10px; border-radius: 4px; text-align: center; transition: all 0.3s ease; }
-        .tracker-label { font-size: 0.75em; text-transform: uppercase; color: var(--hint); font-weight: 600; display: block; margin-bottom: 2px; }
-        .tracker-value { font-size: 1.4em; font-weight: bold; }
+        /* Allocations & Channels Bottom Full Width */
+        .allocations-panel { display: flex; flex-direction: column; }
+        .allocation-header { display: flex; gap: 15px; margin-bottom: 15px; }
+        .tracker { flex: 1; background: #f8fafc; border: 1px solid var(--border); padding: 12px; border-radius: 4px; text-align: center; transition: all 0.3s ease; }
+        .tracker-label { font-size: 0.8em; text-transform: uppercase; color: var(--hint); font-weight: 600; display: block; margin-bottom: 4px; }
+        .tracker-value { font-size: 1.6em; font-weight: bold; }
         .budget-flash { background-color: #dbeafe !important; border-color: #3b82f6 !important; }
         
-        .channels-layout { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
+        .channels-layout { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
         .channel-group-title { font-size: 0.85em; text-transform: uppercase; font-weight: bold; color: #1e293b; margin-bottom: 8px; letter-spacing: 0.5px; border-bottom: 2px solid #e2e8f0; padding-bottom: 4px;}
         .channel-list { display: flex; flex-direction: column; gap: 5px; margin-bottom: 15px;}
         .input-row { display: flex; justify-content: space-between; align-items: center; background: white; border: 1px solid var(--border); padding: 5px 8px; border-radius: 4px; transition: border-color 0.15s; }
@@ -77,7 +82,7 @@
         .btn-run:hover { opacity: 0.9; }
         .btn-run:disabled { background: #94a3b8; cursor: not-allowed; opacity: 1; }
         
-        .log-area { max-height: 280px; overflow-y: auto; font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; background: #0f172a; color: #e2e8f0; padding: 12px; border-radius: 4px; font-size: 0.9em; margin-top: 15px; line-height: 1.5;}
+        .log-area { max-height: 250px; overflow-y: auto; font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; background: #0f172a; color: #e2e8f0; padding: 12px; border-radius: 4px; font-size: 0.9em; margin-top: 15px; line-height: 1.5;}
         .log-entry { margin-bottom: 8px; padding-bottom: 8px; border-bottom: 1px solid #334155; }
         .log-entry:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
         .text-success { color: #34d399; }
@@ -91,7 +96,7 @@
 
 <div class="container">
     <div class="header">
-        <h1>Media Agency Simulator <span class="version-badge">v1.8.0</span></h1>
+        <h1>Media Agency Simulator <span class="version-badge">v1.9.0</span></h1>
         
         <div class="stat-block">
             <div class="stat-item">
@@ -117,85 +122,85 @@
         </div>
     </div>
 
-    <div class="panel market-panel">
-        <h2 style="margin-bottom: 5px; font-size: 1.3em;">Market Context</h2>
-        <div class="market-grid">
-            <div class="card brief-card" id="briefCardBox">
-                <span class="card-title">Brief: <span id="briefTitle">Performance</span></span>
-                <div class="card-desc" id="briefDesc">Focus strictly on direct sales and immediate ROI. Brand building is secondary.</div>
-                <div class="market-roas">Target ROAS: <span id="targetRoas">2.5</span>x</div>
-            </div>
-            <div class="card event-card" id="eventCard">
-                <span class="card-title">Event: <span id="eventTitle">Normal Market</span></span>
-                <div class="card-desc" id="eventDesc">Conditions stable.</div>
+    <div class="strategic-split">
+        <div class="panel market-panel">
+            <h2>Market Context</h2>
+            <div class="market-grid">
+                <div class="card brief-card" id="briefCardBox">
+                    <span class="card-title">Brief: <span id="briefTitle">Performance</span></span>
+                    <div class="card-desc" id="briefDesc">Focus strictly on direct sales and immediate ROI. Brand building is secondary.</div>
+                    <div class="market-roas">Target ROAS: <span id="targetRoas">2.5</span>x</div>
+                </div>
+                <div class="card event-card" id="eventCard">
+                    <span class="card-title">Event: <span id="eventTitle">Normal Market</span></span>
+                    <div class="card-desc" id="eventDesc">Conditions stable.</div>
+                </div>
             </div>
         </div>
-    </div>
 
-    <div class="sidebar">
-        <div class="panel">
+        <div class="panel hr-panel">
             <h2>Operations & HR</h2>
             <div class="hr-grid">
                 <div class="role-card" style="border-color: #a78bfa; background: #f5f3ff;">
-                    <div class="role-info"><strong>CEO</strong> ($15k)<br><span class="hint">Required</span></div>
+                    <div class="role-info"><strong>CEO</strong><span class="hint">($15k) Req.</span></div>
                     <div class="role-controls">
                         <button onclick="updateHR('ceo', -1)">-</button><span id="ceoCount">1</span><button onclick="updateHR('ceo', 1)">+</button>
                     </div>
                 </div>
                 <div class="role-card" style="border-color: #8b5cf6; background: #ede9fe;">
-                    <div class="role-info"><strong>COO</strong> ($25k)<br><span class="hint">Req. if Staff > 25</span></div>
+                    <div class="role-info"><strong>COO</strong><span class="hint">($25k) >25 Staff</span></div>
                     <div class="role-controls">
                         <button onclick="updateHR('coo', -1)">-</button><span id="cooCount">0</span><button onclick="updateHR('coo', 1)">+</button>
                     </div>
                 </div>
 
                 <div class="role-card" style="border-color: #93c5fd; background: #eff6ff;">
-                    <div class="role-info"><strong>VP</strong> ($15k)<br><span class="hint">Req. per 15 Staff</span></div>
+                    <div class="role-info"><strong>VP</strong><span class="hint">($15k) /15 Staff</span></div>
                     <div class="role-controls">
                         <button onclick="updateHR('vp', -1)">-</button><span id="vpCount">0</span><button onclick="updateHR('vp', 1)">+</button>
                     </div>
                 </div>
                 <div class="role-card" style="border-color: #60a5fa; background: #dbeafe;">
-                    <div class="role-info"><strong>Director</strong> ($12k)<br><span class="hint">Req. per 5 Buyers</span></div>
+                    <div class="role-info"><strong>Director</strong><span class="hint">($12k) /5 Buyers</span></div>
                     <div class="role-controls">
                         <button onclick="updateHR('dir', -1)">-</button><span id="dirCount">0</span><button onclick="updateHR('dir', 1)">+</button>
                     </div>
                 </div>
                 
                 <div class="role-card" style="border-color: #fcd34d; background: #fffbeb;">
-                    <div class="role-info"><strong>Acct Mgr</strong> ($6k)<br><span class="hint">Client Relations (Min 1)</span></div>
+                    <div class="role-info"><strong>Acct Mgr</strong><span class="hint">($6k) Min 1</span></div>
                     <div class="role-controls">
                         <button onclick="updateHR('am', -1)">-</button><span id="amCount">1</span><button onclick="updateHR('am', 1)">+</button>
                     </div>
                 </div>
                 <div class="role-card" style="border-color: #fb923c; background: #fff7ed;">
-                    <div class="role-info"><strong>BizDev</strong> ($9k)<br><span class="hint">+2-5% Budget/mo</span></div>
+                    <div class="role-info"><strong>BizDev</strong><span class="hint">($9k) +Budget</span></div>
                     <div class="role-controls">
                         <button onclick="updateHR('bd', -1)">-</button><span id="bdCount">0</span><button onclick="updateHR('bd', 1)">+</button>
                     </div>
                 </div>
 
                 <div class="role-card" style="border-color: #f472b6; background: #fdf2f8;">
-                    <div class="role-info"><strong>HR Mgr</strong> ($7k)<br><span class="hint">Waives Hire/Fire Fees</span></div>
+                    <div class="role-info"><strong>HR Mgr</strong><span class="hint">($7k) No Fees</span></div>
                     <div class="role-controls">
                         <button onclick="updateHR('hrm', -1)">-</button><span id="hrmCount">0</span><button onclick="updateHR('hrm', 1)">+</button>
                     </div>
                 </div>
                 <div class="role-card" style="border-color: #34d399; background: #ecfdf5;">
-                    <div class="role-info"><strong>Creative Dir</strong> ($12k)<br><span class="hint">Doubles Ad Fatigue Limit</span></div>
+                    <div class="role-info"><strong>Creat. Dir</strong><span class="hint">($12k) 2x Fatig.</span></div>
                     <div class="role-controls">
                         <button onclick="updateHR('cd', -1)">-</button><span id="cdCount">0</span><button onclick="updateHR('cd', 1)">+</button>
                     </div>
                 </div>
 
                 <div class="role-card">
-                    <div class="role-info"><strong>Sr Strat</strong> ($8k)<br><span class="hint">$150k Cap</span></div>
+                    <div class="role-info"><strong>Sr Strat</strong><span class="hint">($8k) $150k Cap</span></div>
                     <div class="role-controls">
                         <button onclick="updateHR('sr', -1)">-</button><span id="srCount">3</span><button onclick="updateHR('sr', 1)">+</button>
                     </div>
                 </div>
                 <div class="role-card">
-                    <div class="role-info"><strong>Jr Buyer</strong> ($3k)<br><span class="hint">$50k Cap</span></div>
+                    <div class="role-info"><strong>Jr Buyer</strong><span class="hint">($3k) $50k Cap</span></div>
                     <div class="role-controls">
                         <button onclick="updateHR('jr', -1)">-</button><span id="jrCount">1</span><button onclick="updateHR('jr', 1)">+</button>
                     </div>
@@ -210,7 +215,7 @@
         </div>
     </div>
 
-    <div class="panel" style="display: flex; flex-direction: column;">
+    <div class="panel allocations-panel">
         <div class="allocation-header">
             <div class="tracker">
                 <span class="tracker-label">Allocated Media</span>
@@ -283,14 +288,12 @@
             </div>
         </div>
 
-        <div style="flex-grow: 1;"></div>
-
         <div class="action-bar">
             <button id="runBtn" class="btn-run" onclick="runMonth()" disabled>Execute Campaign</button>
         </div>
         
         <div class="log-area" id="logArea">
-            <div class="log-entry">System v1.8.0 initialized. Watch your Total Headcount! As you scale, you will be forced to hire VPs and a COO.</div>
+            <div class="log-entry">System v1.9.0 initialized. Watch your Total Headcount! As you scale, you will be forced to hire VPs and a COO.</div>
         </div>
     </div>
 </div>
