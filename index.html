@@ -26,7 +26,8 @@
         h2 { margin: 0 0 10px 0; font-size: 1.2em; color: #334155; border-bottom: 1px solid var(--border); padding-bottom: 6px; }
         
         /* Strategic Split (Market & HR) */
-        .strategic-split { display: grid; grid-template-columns: 3fr 1fr; gap: 15px; align-items: start; } /* Changed from stretch to start to prevent oversized boxes */
+        .strategic-split { display: grid; grid-template-columns: 3fr 1fr; gap: 15px; align-items: start; } 
+        .left-column { display: flex; flex-direction: column; gap: 15px; }
 
         /* Market Context (Hyper-Compact) */
         .market-panel { display: flex; flex-direction: column; gap: 8px; box-sizing: border-box; }
@@ -58,8 +59,8 @@
         
         /* Allocations & Channels Bottom Full Width */
         .allocations-panel { display: flex; flex-direction: column; }
-        .allocation-header { display: flex; gap: 15px; margin-bottom: 15px; }
-        .tracker { flex: 1; background: #f8fafc; border: 1px solid var(--border); padding: 12px; border-radius: 4px; text-align: center; transition: all 0.3s ease; }
+        .allocation-header { display: flex; gap: 15px; }
+        .tracker { flex: 1; background: var(--panel); border: 1px solid var(--border); padding: 15px; border-radius: 6px; text-align: center; transition: all 0.3s ease; box-shadow: 0 1px 2px rgba(0,0,0,0.03); }
         .tracker-label { font-size: 0.8em; text-transform: uppercase; color: var(--hint); font-weight: 600; display: block; margin-bottom: 4px; }
         .tracker-value { font-size: 1.6em; font-weight: bold; }
         .budget-flash { background-color: #dbeafe !important; border-color: #3b82f6 !important; }
@@ -97,7 +98,7 @@
 
 <div class="container">
     <div class="header">
-        <h1>Media Agency Simulator <span class="version-badge">v1.10.0</span></h1>
+        <h1>Media Agency Simulator <span class="version-badge">v1.11.0</span></h1>
         
         <div class="stat-block">
             <div class="stat-item">
@@ -124,21 +125,38 @@
     </div>
 
     <div class="strategic-split">
-        <div class="panel market-panel">
-            <h2 style="margin-bottom: 0;">Market Context</h2>
-            <div class="market-grid">
-                <div class="card brief-card" id="briefCardBox">
-                    <div class="card-header-row">
-                        <span class="card-title">Brief: <span id="briefTitle">Performance</span></span>
-                        <div class="market-roas">Target ROAS: <span id="targetRoas">2.5</span>x</div>
+        <div class="left-column">
+            <div class="panel market-panel">
+                <h2 style="margin-bottom: 0;">Market Context</h2>
+                <div class="market-grid">
+                    <div class="card brief-card" id="briefCardBox">
+                        <div class="card-header-row">
+                            <span class="card-title">Brief: <span id="briefTitle">Performance</span></span>
+                            <div class="market-roas">Target ROAS: <span id="targetRoas">2.5</span>x</div>
+                        </div>
+                        <div class="card-desc" id="briefDesc">Focus strictly on direct sales and immediate ROI. Brand building is secondary.</div>
                     </div>
-                    <div class="card-desc" id="briefDesc">Focus strictly on direct sales and immediate ROI. Brand building is secondary.</div>
+                    <div class="card event-card" id="eventCard">
+                        <div class="card-header-row">
+                            <span class="card-title">Event: <span id="eventTitle">Normal Market</span></span>
+                        </div>
+                        <div class="card-desc" id="eventDesc">Conditions stable.</div>
+                    </div>
                 </div>
-                <div class="card event-card" id="eventCard">
-                    <div class="card-header-row">
-                        <span class="card-title">Event: <span id="eventTitle">Normal Market</span></span>
-                    </div>
-                    <div class="card-desc" id="eventDesc">Conditions stable.</div>
+            </div>
+
+            <div class="allocation-header">
+                <div class="tracker">
+                    <span class="tracker-label">Allocated Media</span>
+                    <span class="tracker-value" id="allocatedTotal" style="color: var(--primary);">$0</span>
+                </div>
+                <div class="tracker" id="budgetTrackerCard">
+                    <span class="tracker-label">Client Budget</span>
+                    <span class="tracker-value" id="clientBudgetTracker">$500,000</span>
+                </div>
+                <div class="tracker">
+                    <span class="tracker-label">Staffing Capacity</span>
+                    <span class="tracker-value" id="capacityLimit">$500,000</span>
                 </div>
             </div>
         </div>
@@ -221,21 +239,6 @@
     </div>
 
     <div class="panel allocations-panel">
-        <div class="allocation-header">
-            <div class="tracker">
-                <span class="tracker-label">Allocated Media</span>
-                <span class="tracker-value" id="allocatedTotal" style="color: var(--primary);">$0</span>
-            </div>
-            <div class="tracker" id="budgetTrackerCard">
-                <span class="tracker-label">Client Budget</span>
-                <span class="tracker-value" id="clientBudgetTracker">$500,000</span>
-            </div>
-            <div class="tracker">
-                <span class="tracker-label">Staffing Capacity</span>
-                <span class="tracker-value" id="capacityLimit">$500,000</span>
-            </div>
-        </div>
-        
         <div class="channels-layout">
             <div>
                 <div class="channel-group-title">Digital Performance</div>
@@ -298,7 +301,7 @@
         </div>
         
         <div class="log-area" id="logArea">
-            <div class="log-entry">System v1.10.0 initialized. Watch your Total Headcount! As you scale, you will be forced to hire VPs and a COO.</div>
+            <div class="log-entry">System v1.11.0 initialized. Watch your Total Headcount! As you scale, you will be forced to hire VPs and a COO.</div>
         </div>
     </div>
 </div>
