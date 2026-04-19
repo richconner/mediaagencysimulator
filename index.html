@@ -25,7 +25,7 @@
         .panel { background: var(--panel); padding: 15px; border-radius: 6px; border: 1px solid var(--border); box-shadow: 0 1px 2px rgba(0,0,0,0.03); }
         h2 { margin: 0 0 10px 0; font-size: 1.2em; color: #334155; border-bottom: 1px solid var(--border); padding-bottom: 6px; }
         
-        /* Strategic Split (Market & HR) */
+        /* Strategic Split (Market & Channels Left, HR Right) */
         .strategic-split { display: grid; grid-template-columns: 3fr 1fr; gap: 15px; align-items: start; } 
         .left-column { display: flex; flex-direction: column; gap: 15px; }
 
@@ -39,6 +39,27 @@
         .market-grid .card-title { font-weight: bold; font-size: 1.1em; color: #1e293b; }
         .market-grid .card-desc { font-size: 0.95em; color: #334155; line-height: 1.4; }
         .market-roas { font-weight: bold; color: var(--primary); font-size: 1.05em; background: #dbeafe; padding: 2px 8px; border-radius: 4px;}
+
+        /* Allocation Trackers */
+        .allocation-header { display: flex; gap: 15px; }
+        .tracker { flex: 1; background: var(--panel); border: 1px solid var(--border); padding: 15px; border-radius: 6px; text-align: center; transition: all 0.3s ease; box-shadow: 0 1px 2px rgba(0,0,0,0.03); }
+        .tracker-label { font-size: 0.8em; text-transform: uppercase; color: var(--hint); font-weight: 600; display: block; margin-bottom: 4px; }
+        .tracker-value { font-size: 1.6em; font-weight: bold; }
+        .budget-flash { background-color: #dbeafe !important; border-color: #3b82f6 !important; }
+
+        /* Channels Layout */
+        .channels-layout { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+        .channel-group-title { font-size: 0.85em; text-transform: uppercase; font-weight: bold; color: #1e293b; margin-bottom: 8px; letter-spacing: 0.5px; border-bottom: 2px solid #e2e8f0; padding-bottom: 4px;}
+        .channel-list { display: flex; flex-direction: column; gap: 5px; margin-bottom: 15px;}
+        .input-row { display: flex; justify-content: space-between; align-items: center; background: white; border: 1px solid var(--border); padding: 5px 8px; border-radius: 4px; transition: border-color 0.15s; }
+        .input-row:focus-within { border-color: var(--primary); box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1); }
+        .ch-info { flex: 1; }
+        .ch-info label { font-weight: 600; font-size: 0.9em; display: block; }
+        .ch-info .hint { font-size: 0.75em; color: var(--hint); display: block; margin-top: 1px;}
+        .ch-input { display: flex; align-items: center; }
+        .ch-input span { color: var(--hint); font-size: 0.9em; margin-right: 4px; }
+        .input-row input { width: 85px; padding: 4px 6px; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 0.95em; text-align: right; }
+        .input-row input:focus { outline: none; }
 
         /* HR Controls */
         .hr-panel { display: flex; flex-direction: column; box-sizing: border-box; }
@@ -57,29 +78,9 @@
         .hr-rules.warning { background: #fffbeb; color: #b45309; border: 1px dashed #fcd34d; }
         .hr-rules.waived { background: #ecfdf5; color: #065f46; border: 1px solid #6ee7b7; }
         
-        /* Allocations & Channels Bottom Full Width */
-        .allocations-panel { display: flex; flex-direction: column; }
-        .allocation-header { display: flex; gap: 15px; }
-        .tracker { flex: 1; background: var(--panel); border: 1px solid var(--border); padding: 15px; border-radius: 6px; text-align: center; transition: all 0.3s ease; box-shadow: 0 1px 2px rgba(0,0,0,0.03); }
-        .tracker-label { font-size: 0.8em; text-transform: uppercase; color: var(--hint); font-weight: 600; display: block; margin-bottom: 4px; }
-        .tracker-value { font-size: 1.6em; font-weight: bold; }
-        .budget-flash { background-color: #dbeafe !important; border-color: #3b82f6 !important; }
-        
-        .channels-layout { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
-        .channel-group-title { font-size: 0.85em; text-transform: uppercase; font-weight: bold; color: #1e293b; margin-bottom: 8px; letter-spacing: 0.5px; border-bottom: 2px solid #e2e8f0; padding-bottom: 4px;}
-        .channel-list { display: flex; flex-direction: column; gap: 5px; margin-bottom: 15px;}
-        .input-row { display: flex; justify-content: space-between; align-items: center; background: white; border: 1px solid var(--border); padding: 5px 8px; border-radius: 4px; transition: border-color 0.15s; }
-        .input-row:focus-within { border-color: var(--primary); box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1); }
-        .ch-info { flex: 1; }
-        .ch-info label { font-weight: 600; font-size: 0.9em; display: block; }
-        .ch-info .hint { font-size: 0.75em; color: var(--hint); display: block; margin-top: 1px;}
-        .ch-input { display: flex; align-items: center; }
-        .ch-input span { color: var(--hint); font-size: 0.9em; margin-right: 4px; }
-        .input-row input { width: 85px; padding: 4px 6px; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 0.95em; text-align: right; }
-        .input-row input:focus { outline: none; }
-        
-        /* Execution & Logs */
-        .action-bar { display: flex; gap: 15px; margin-top: 15px; align-items: center; }
+        /* Execution & Logs (Bottom Panel) */
+        .action-log-panel { display: flex; flex-direction: column; }
+        .action-bar { display: flex; gap: 15px; align-items: center; }
         .btn-run { background: var(--success); color: white; border: none; padding: 14px 24px; font-size: 1.2em; border-radius: 4px; cursor: pointer; font-weight: bold; transition: opacity 0.2s; flex: 1; text-transform: uppercase; letter-spacing: 1px;}
         .btn-run:hover { opacity: 0.9; }
         .btn-run:disabled { background: #94a3b8; cursor: not-allowed; opacity: 1; }
@@ -98,7 +99,7 @@
 
 <div class="container">
     <div class="header">
-        <h1>Media Agency Simulator <span class="version-badge">v1.11.0</span></h1>
+        <h1>Media Agency Simulator <span class="version-badge">v1.12.0</span></h1>
         
         <div class="stat-block">
             <div class="stat-item">
@@ -157,6 +158,65 @@
                 <div class="tracker">
                     <span class="tracker-label">Staffing Capacity</span>
                     <span class="tracker-value" id="capacityLimit">$500,000</span>
+                </div>
+            </div>
+
+            <div class="panel">
+                <div class="channels-layout">
+                    <div>
+                        <div class="channel-group-title">Digital Performance</div>
+                        <div class="channel-list">
+                            <div class="input-row"><div class="ch-info"><label>Paid Search (PPC)</label><span class="hint">High intent</span></div><div class="ch-input"><span>$</span><input type="number" id="ch_ppc" value="0" min="0" oninput="validateForm()"></div></div>
+                            <div class="input-row"><div class="ch-info"><label>Paid Social</label><span class="hint">Scaleable</span></div><div class="ch-input"><span>$</span><input type="number" id="ch_social" value="0" min="0" oninput="validateForm()"></div></div>
+                            <div class="input-row"><div class="ch-info"><label>Programmatic</label><span class="hint">Cheap reach</span></div><div class="ch-input"><span>$</span><input type="number" id="ch_prog" value="0" min="0" oninput="validateForm()"></div></div>
+                            <div class="input-row"><div class="ch-info"><label>Retail Media (Amazon)</label><span class="hint">Highest ROAS, expensive</span></div><div class="ch-input"><span>$</span><input type="number" id="ch_retail" value="0" min="0" oninput="validateForm()"></div></div>
+                            <div class="input-row"><div class="ch-info"><label>Affiliate Marketing</label><span class="hint">Low risk</span></div><div class="ch-input"><span>$</span><input type="number" id="ch_affiliate" value="0" min="0" oninput="validateForm()"></div></div>
+                            <div class="input-row"><div class="ch-info"><label>SEO (Invest)</label><span class="hint">Builds momentum</span></div><div class="ch-input"><span>$</span><input type="number" id="ch_seo" value="0" min="0" oninput="validateForm()"></div></div>
+                        </div>
+
+                        <div class="channel-group-title">Direct & Retention</div>
+                        <div class="channel-list">
+                            <div class="input-row"><div class="ch-info"><label>Email Blasts</label><span class="hint">Fatigues > $10k (Doubled w/ CD)</span></div><div class="ch-input"><span>$</span><input type="number" id="ch_email" value="0" min="0" oninput="validateForm()"></div></div>
+                            <div class="input-row"><div class="ch-info"><label>SMS</label><span class="hint">Fatigues > $5k (Doubled w/ CD)</span></div><div class="ch-input"><span>$</span><input type="number" id="ch_sms" value="0" min="0" oninput="validateForm()"></div></div>
+                            <div class="input-row"><div class="ch-info"><label>Telemarketing</label><span class="hint">Steady 1.2x. Annoys clients.</span></div><div class="ch-input"><span>$</span><input type="number" id="ch_telemarketing" value="0" min="0" oninput="validateForm()"></div></div>
+                            <div class="input-row"><div class="ch-info"><label>Loyalty Apps</label><span class="hint">Boosts Email/SMS forever</span></div><div class="ch-input"><span>$</span><input type="number" id="ch_loyalty" value="0" min="0" oninput="validateForm()"></div></div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="channel-group-title">Brand & Awareness</div>
+                        <div class="channel-list">
+                            <div class="input-row"><div class="ch-info"><label>Linear TV</label><span class="hint">$50k min. Builds Halo</span></div><div class="ch-input"><span>$</span><input type="number" id="ch_tv" value="0" min="0" oninput="validateForm()"></div></div>
+                            <div class="input-row"><div class="ch-info"><label>Connected TV (CTV)</label><span class="hint">$10k min. Fatigues > $15k (Doubled w/ CD)</span></div><div class="ch-input"><span>$</span><input type="number" id="ch_ctv" value="0" min="0" oninput="validateForm()"></div></div>
+                            <div class="input-row"><div class="ch-info"><label>Billboards</label><span class="hint">Safe return floor</span></div><div class="ch-input"><span>$</span><input type="number" id="ch_billboard" value="0" min="0" oninput="validateForm()"></div></div>
+                            <div class="input-row"><div class="ch-info"><label>Cinema Ads</label><span class="hint">Local awareness</span></div><div class="ch-input"><span>$</span><input type="number" id="ch_cinema" value="0" min="0" oninput="validateForm()"></div></div>
+                            <div class="input-row"><div class="ch-info"><label>Podcasts</label><span class="hint">Deep engagement</span></div><div class="ch-input"><span>$</span><input type="number" id="ch_podcast" value="0" min="0" oninput="validateForm()"></div></div>
+                            <div class="input-row"><div class="ch-info"><label>Influencers</label><span class="hint">Boom or bust</span></div><div class="ch-input"><span>$</span><input type="number" id="ch_influencer" value="0" min="0" oninput="validateForm()"></div></div>
+                        </div>
+
+                        <div class="channel-group-title">PR & Content</div>
+                        <div class="channel-list">
+                            <div class="input-row"><div class="ch-info"><label>Press Releases</label><span class="hint">> $5k restores Patience</span></div><div class="ch-input"><span>$</span><input type="number" id="ch_pr" value="0" min="0" oninput="validateForm()"></div></div>
+                            <div class="input-row"><div class="ch-info"><label>Branded Content</label><span class="hint">Boosts SEO instantly</span></div><div class="ch-input"><span>$</span><input type="number" id="ch_branded" value="0" min="0" oninput="validateForm()"></div></div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="channel-group-title">Real World & B2B</div>
+                        <div class="channel-list">
+                            <div class="input-row"><div class="ch-info"><label>Direct Mail</label><span class="hint">Physical format</span></div><div class="ch-input"><span>$</span><input type="number" id="ch_mail" value="0" min="0" oninput="validateForm()"></div></div>
+                            <div class="input-row"><div class="ch-info"><label>Experiential Stunt</label><span class="hint">$15k flat. 30% huge boom.</span></div><div class="ch-input"><span>$</span><input type="number" id="ch_experiential" value="0" min="0" step="15000" oninput="validateForm()"></div></div>
+                            <div class="input-row"><div class="ch-info"><label>Transit & OOH</label><span class="hint">Boosted by Programmatic</span></div><div class="ch-input"><span>$</span><input type="number" id="ch_transit" value="0" min="0" oninput="validateForm()"></div></div>
+                            <div class="input-row"><div class="ch-info"><label>Print/Trade Journals</label><span class="hint">B2B Anchor</span></div><div class="ch-input"><span>$</span><input type="number" id="ch_print" value="0" min="0" oninput="validateForm()"></div></div>
+                            <div class="input-row"><div class="ch-info"><label>Webinars</label><span class="hint">Cost $5k, then massive ROI</span></div><div class="ch-input"><span>$</span><input type="number" id="ch_webinar" value="0" min="0" oninput="validateForm()"></div></div>
+                        </div>
+
+                        <div class="channel-group-title">Niche & Wildcards</div>
+                        <div class="channel-list">
+                            <div class="input-row"><div class="ch-info"><label>In-Game / Esports</label><span class="hint">Gen-Z Boom or Bust</span></div><div class="ch-input"><span>$</span><input type="number" id="ch_ingame" value="0" min="0" oninput="validateForm()"></div></div>
+                            <div class="input-row"><div class="ch-info"><label>Community (Reddit)</label><span class="hint">Backlash if > $2k</span></div><div class="ch-input"><span>$</span><input type="number" id="ch_community" value="0" min="0" oninput="validateForm()"></div></div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -238,70 +298,13 @@
         </div>
     </div>
 
-    <div class="panel allocations-panel">
-        <div class="channels-layout">
-            <div>
-                <div class="channel-group-title">Digital Performance</div>
-                <div class="channel-list">
-                    <div class="input-row"><div class="ch-info"><label>Paid Search (PPC)</label><span class="hint">High intent</span></div><div class="ch-input"><span>$</span><input type="number" id="ch_ppc" value="0" min="0" oninput="validateForm()"></div></div>
-                    <div class="input-row"><div class="ch-info"><label>Paid Social</label><span class="hint">Scaleable</span></div><div class="ch-input"><span>$</span><input type="number" id="ch_social" value="0" min="0" oninput="validateForm()"></div></div>
-                    <div class="input-row"><div class="ch-info"><label>Programmatic</label><span class="hint">Cheap reach</span></div><div class="ch-input"><span>$</span><input type="number" id="ch_prog" value="0" min="0" oninput="validateForm()"></div></div>
-                    <div class="input-row"><div class="ch-info"><label>Retail Media (Amazon)</label><span class="hint">Highest ROAS, expensive</span></div><div class="ch-input"><span>$</span><input type="number" id="ch_retail" value="0" min="0" oninput="validateForm()"></div></div>
-                    <div class="input-row"><div class="ch-info"><label>Affiliate Marketing</label><span class="hint">Low risk</span></div><div class="ch-input"><span>$</span><input type="number" id="ch_affiliate" value="0" min="0" oninput="validateForm()"></div></div>
-                    <div class="input-row"><div class="ch-info"><label>SEO (Invest)</label><span class="hint">Builds momentum</span></div><div class="ch-input"><span>$</span><input type="number" id="ch_seo" value="0" min="0" oninput="validateForm()"></div></div>
-                </div>
-
-                <div class="channel-group-title">Direct & Retention</div>
-                <div class="channel-list">
-                    <div class="input-row"><div class="ch-info"><label>Email Blasts</label><span class="hint">Fatigues > $10k (Doubled w/ CD)</span></div><div class="ch-input"><span>$</span><input type="number" id="ch_email" value="0" min="0" oninput="validateForm()"></div></div>
-                    <div class="input-row"><div class="ch-info"><label>SMS</label><span class="hint">Fatigues > $5k (Doubled w/ CD)</span></div><div class="ch-input"><span>$</span><input type="number" id="ch_sms" value="0" min="0" oninput="validateForm()"></div></div>
-                    <div class="input-row"><div class="ch-info"><label>Telemarketing</label><span class="hint">Steady 1.2x. Annoys clients.</span></div><div class="ch-input"><span>$</span><input type="number" id="ch_telemarketing" value="0" min="0" oninput="validateForm()"></div></div>
-                    <div class="input-row"><div class="ch-info"><label>Loyalty Apps</label><span class="hint">Boosts Email/SMS forever</span></div><div class="ch-input"><span>$</span><input type="number" id="ch_loyalty" value="0" min="0" oninput="validateForm()"></div></div>
-                </div>
-            </div>
-
-            <div>
-                <div class="channel-group-title">Brand & Awareness</div>
-                <div class="channel-list">
-                    <div class="input-row"><div class="ch-info"><label>Linear TV</label><span class="hint">$50k min. Builds Halo</span></div><div class="ch-input"><span>$</span><input type="number" id="ch_tv" value="0" min="0" oninput="validateForm()"></div></div>
-                    <div class="input-row"><div class="ch-info"><label>Connected TV (CTV)</label><span class="hint">$10k min. Fatigues > $15k (Doubled w/ CD)</span></div><div class="ch-input"><span>$</span><input type="number" id="ch_ctv" value="0" min="0" oninput="validateForm()"></div></div>
-                    <div class="input-row"><div class="ch-info"><label>Billboards</label><span class="hint">Safe return floor</span></div><div class="ch-input"><span>$</span><input type="number" id="ch_billboard" value="0" min="0" oninput="validateForm()"></div></div>
-                    <div class="input-row"><div class="ch-info"><label>Cinema Ads</label><span class="hint">Local awareness</span></div><div class="ch-input"><span>$</span><input type="number" id="ch_cinema" value="0" min="0" oninput="validateForm()"></div></div>
-                    <div class="input-row"><div class="ch-info"><label>Podcasts</label><span class="hint">Deep engagement</span></div><div class="ch-input"><span>$</span><input type="number" id="ch_podcast" value="0" min="0" oninput="validateForm()"></div></div>
-                    <div class="input-row"><div class="ch-info"><label>Influencers</label><span class="hint">Boom or bust</span></div><div class="ch-input"><span>$</span><input type="number" id="ch_influencer" value="0" min="0" oninput="validateForm()"></div></div>
-                </div>
-
-                <div class="channel-group-title">PR & Content</div>
-                <div class="channel-list">
-                    <div class="input-row"><div class="ch-info"><label>Press Releases</label><span class="hint">> $5k restores Patience</span></div><div class="ch-input"><span>$</span><input type="number" id="ch_pr" value="0" min="0" oninput="validateForm()"></div></div>
-                    <div class="input-row"><div class="ch-info"><label>Branded Content</label><span class="hint">Boosts SEO instantly</span></div><div class="ch-input"><span>$</span><input type="number" id="ch_branded" value="0" min="0" oninput="validateForm()"></div></div>
-                </div>
-            </div>
-
-            <div>
-                <div class="channel-group-title">Real World & B2B</div>
-                <div class="channel-list">
-                    <div class="input-row"><div class="ch-info"><label>Direct Mail</label><span class="hint">Physical format</span></div><div class="ch-input"><span>$</span><input type="number" id="ch_mail" value="0" min="0" oninput="validateForm()"></div></div>
-                    <div class="input-row"><div class="ch-info"><label>Experiential Stunt</label><span class="hint">$15k flat. 30% huge boom.</span></div><div class="ch-input"><span>$</span><input type="number" id="ch_experiential" value="0" min="0" step="15000" oninput="validateForm()"></div></div>
-                    <div class="input-row"><div class="ch-info"><label>Transit & OOH</label><span class="hint">Boosted by Programmatic</span></div><div class="ch-input"><span>$</span><input type="number" id="ch_transit" value="0" min="0" oninput="validateForm()"></div></div>
-                    <div class="input-row"><div class="ch-info"><label>Print/Trade Journals</label><span class="hint">B2B Anchor</span></div><div class="ch-input"><span>$</span><input type="number" id="ch_print" value="0" min="0" oninput="validateForm()"></div></div>
-                    <div class="input-row"><div class="ch-info"><label>Webinars</label><span class="hint">Cost $5k, then massive ROI</span></div><div class="ch-input"><span>$</span><input type="number" id="ch_webinar" value="0" min="0" oninput="validateForm()"></div></div>
-                </div>
-
-                <div class="channel-group-title">Niche & Wildcards</div>
-                <div class="channel-list">
-                    <div class="input-row"><div class="ch-info"><label>In-Game / Esports</label><span class="hint">Gen-Z Boom or Bust</span></div><div class="ch-input"><span>$</span><input type="number" id="ch_ingame" value="0" min="0" oninput="validateForm()"></div></div>
-                    <div class="input-row"><div class="ch-info"><label>Community (Reddit)</label><span class="hint">Backlash if > $2k</span></div><div class="ch-input"><span>$</span><input type="number" id="ch_community" value="0" min="0" oninput="validateForm()"></div></div>
-                </div>
-            </div>
-        </div>
-
+    <div class="panel action-log-panel">
         <div class="action-bar">
             <button id="runBtn" class="btn-run" onclick="runMonth()" disabled>Execute Campaign</button>
         </div>
         
         <div class="log-area" id="logArea">
-            <div class="log-entry">System v1.11.0 initialized. Watch your Total Headcount! As you scale, you will be forced to hire VPs and a COO.</div>
+            <div class="log-entry">System v1.12.0 initialized. Watch your Total Headcount! As you scale, you will be forced to hire VPs and a COO.</div>
         </div>
     </div>
 </div>
